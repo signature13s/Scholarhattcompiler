@@ -1,0 +1,113 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f9fafb; /* gray-50 */
+}
+
+.main-layout.dark {
+  background-color: #111827; /* gray-900 */
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  display: none;
+}
+
+.mobile-menu-overlay.visible {
+  display: block;
+  position: relative;
+}
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+.menu-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 16rem; /* w-64 */
+  z-index: 50;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-overlay {
+    display: none;
+  }
+}
+
+/* Sidebar for Desktop */
+.sidebar-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .sidebar-desktop {
+    display: block;
+  }
+}
+
+/* Code + Panel Layout */
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+@media (min-width: 768px) {
+  .editor-container {
+    flex-direction: row;
+  }
+}
+
+.code-editor-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Resizable Panel (Right-side) */
+.resizable-panel-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .resizable-panel-desktop {
+    display: block;
+  }
+}
+
+.resizable-content {
+  background-color: white;
+  border-left: 1px solid #e5e7eb; /* gray-200 */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.resizable-content.dark {
+  background-color: #111827;
+  border-left-color: #374151; /* gray-700 */
+}
+
+/* Mobile Input/Output Panel */
+.io-mobile {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .io-mobile {
+    display: none;
+  }
+}

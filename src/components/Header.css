@@ -1,0 +1,164 @@
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+}
+
+.header.dark {
+  background-color: #111827;
+  border-color: #374151;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-icon {
+  width: 2rem;
+  height: 2rem;
+  color: #2563eb;
+}
+
+.brand.dark .brand-icon {
+  color: #60a5fa;
+}
+
+.brand-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.brand.dark .brand-name {
+  color: white;
+}
+
+.nav-links {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #374151;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #2563eb;
+}
+
+.nav-link.dark {
+  color: #d1d5db;
+}
+
+.nav-link.dark:hover {
+  color: #60a5fa;
+}
+
+.nav-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.action-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editor-controls {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .editor-controls {
+    display: flex;
+  }
+}
+
+.run-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #16a34a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.run-button:hover {
+  background-color: #15803d;
+}
+
+.shortcut {
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.action-button {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: #4b5563;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  color: #2563eb;
+  background-color: #f3f4f6;
+}
+
+.action-button.dark {
+  color: #d1d5db;
+}
+
+.action-button.dark:hover {
+  color: #60a5fa;
+  background-color: #1f2937;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cta-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.cta-button:hover {
+  background-color: #1d4ed8;
+}
