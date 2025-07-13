@@ -14,27 +14,9 @@ import {
   TestTube
 } from 'lucide-react';
 import './Header.css';
-interface HeaderProps {
-  onRun: () => void;
-  onDownload: () => void;
-  onCopy: () => void;
-  onShare: () => void;
-  onReset: () => void;
-  onSettings: () => void;
-  isDarkMode: boolean;
-  onThemeToggle: () => void;
-}
 
-const Header: React.FC<HeaderProps> = ({
-  onRun,
-  onDownload,
-  onCopy,
-  onShare,
-  onReset,
-  onSettings,
-  isDarkMode,
-  onThemeToggle
-}) => {
+
+const Header = () => {
   return (
    <header className="header">
   <div className="header-container">
@@ -69,32 +51,25 @@ const Header: React.FC<HeaderProps> = ({
     {/* Action Buttons */}
     <div className="action-section">
       <div className="editor-controls">
-        <button onClick={onRun} className="run-button">
+        {/* <button onClick={onRun} className="run-button">
           <Play className="icon" />
           <span>Run</span>
           <span className="shortcut">Ctrl+Enter</span>
-        </button>
-        <button onClick={onDownload} className="action-button" title="Download">
-          <Download className="icon" />
-        </button>
-        <button onClick={onCopy} className="action-button" title="Copy">
-          <Copy className="icon" />
-        </button>
-        <button onClick={onShare} className="action-button" title="Share">
+        </button> */}
+       
+        {/* <button onClick={onShare} className="action-button" title="Share">
           <Share className="icon" />
-        </button>
-        <button onClick={onReset} className="action-button" title="Reset">
-          <RotateCcw className="icon" />
-        </button>
-        <button onClick={onSettings} className="action-button" title="Settings">
+        </button> */}
+        
+        {/* <button onClick={onSettings} className="action-button" title="Settings">
           <Settings className="icon" />
-        </button>
+        </button> */}
       </div>
 
       {/* Theme Toggle */}
-      <button onClick={onThemeToggle} className="action-button">
+      {/* <button onClick={onThemeToggle} className="action-button">
         {isDarkMode ? <Sun className="icon" /> : <Moon className="icon" />}
-      </button>
+      </button> */}
 
       {/* CTA Button */}
       <button className="cta-button">Free C# Course</button>

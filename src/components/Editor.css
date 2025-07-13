@@ -2,7 +2,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f9fafb;
+  background-color: #1f2937;
 }
 
 .editor-container.dark {
@@ -42,8 +42,8 @@
 }
 
 .active-tab {
-  background-color: #f9fafb;
-  color: #2563eb;
+  background-color: #1f2937;
+  color: #60a5fa;
 }
 
 .active-tab.dark {
@@ -56,7 +56,7 @@
 }
 
 .inactive-tab:hover {
-  background-color: #f9fafb;
+  background-color: #9ca3af;
 }
 
 .inactive-tab.dark {
@@ -96,7 +96,10 @@
   padding: 0.5rem;
   color: #9ca3af;
 }
-
+.add-button.dark {
+  color: #60a5fa;
+  background-color: #111827;
+}
 .add-button:hover {
   color: #4b5563;
   background-color: #f3f4f6;
@@ -129,6 +132,25 @@
   border-radius: 0.375rem;
   font-size: 0.875rem;
   transition: background-color 0.2s;
+}
+.action-button {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: #2563eb;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background-color: #1f2937;
+}
+
+.action-button.dark {
+  color: #60a5fa;
+  background-color: #111827;
+}
+
+.action-button.dark:hover {
+  color: #f3f4f6;
 }
 
 .run-button:hover {
@@ -167,13 +189,13 @@
 }
 
 .code-area {
+  display: flex;
   flex: 1;
   position: relative;
 }
 
 .code-textarea {
   width: 100%;
-  height: 100%;
   padding: 1rem;
   background-color: white;
   color: #111827;

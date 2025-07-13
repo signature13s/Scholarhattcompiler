@@ -1,53 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { Play, FileText, X, Plus } from 'lucide-react';
-import './Editor.css'; 
+import React, { useState, useEffect } from "react";
+import { Play, FileText, X, Plus, Download, Copy, RotateCcw } from "lucide-react";
+import "./Editor.css";
+import Editor from '@monaco-editor/react';
+
+import {SAMPLE_CODE} from '../helpers/constant'
 interface CodeEditorProps {
   language: string;
   onRun: () => void;
+  onDownload: () => void; onCopy: () => void; onReset: () => void;
+  data:string;
+  setData: ()=>{};
+    user:string;
+    seteditorstate:any;
+    editorstate:{
+          user: string,
+          file: string,
+          language: string, //csharp, java, python, javascript, typescript
+          code: string,
+          input: [],
+          downloadFile:string,
+        }
 }
 
 interface FileTab {
   id: string;
   name: string;
-  content: string;
+  content: string ;
   language: string;
+
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, onCopy, onReset,setData,data,editorstate,seteditorstate}) => {
   const [activeFile, setActiveFile] = useState(0);
-  const [files, setFiles] = useState<FileTab[]>([
-    {
-      id: '1',
-      name: 'program.cs',
-      content: `using System;
-
-class Program
-{
-    static void Main()
-    {
-        Console.WriteLine("Hello, World!");
-        
-        // Your code here
-        int number = 42;
-        Console.WriteLine($"The answer is: {number}");
-        
-        // Example: Simple calculation
-        int sum = 0;
-        for (int i = 1; i <= 10; i++)
-        {
-            sum += i;
-        }
-        Console.WriteLine($"Sum of 1-10: {sum}");
-    }
-}`,
-      language: 'csharp'
-    }
-  ]);
-
+  const [files, setFiles] = useState<FileTab[]>(SAMPLE_CODE.filter((snippet)=>snippet.language==language));
   const [code, setCode] = useState(files[0].content);
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
 
+
+  function runcode(){
+
+    const currentState = editorstate;
+    currentState.code = code;
+    currentState.input = files;
+    seteditorstate(currentState);
+  }
   useEffect(() => {
+    runcode()
     setCode(files[activeFile].content);
   }, [activeFile, files]);
 
@@ -61,17 +59,9 @@ class Program
   const addNewFile = () => {
     const newFile: FileTab = {
       id: Date.now().toString(),
-      name: `file${files.length + 1}.cs`,
-      content: `using System;
-
-class Program
-{
-    static void Main()
-    {
-        // Your code here
-    }
-}`,
-      language: 'csharp'
+      name: `file${files.length + 1}.${language}`,
+      content: SAMPLE_CODE.find((snippet)=>snippet.language==language)?.content,
+      language: language,
     };
     setFiles([...files, newFile]);
     setActiveFile(files.length);
@@ -87,91 +77,106 @@ class Program
     }
   };
 
-  const lines = code.split('\n');
+  const lines = code.split("\n");
 
   return (
     <div className="editor-container">
-  {/* File Tabs */}
-  <div className="file-tabs">
-    <div className="file-list">
-      {files.map((file, index) => (
-        <div
-          key={file.id}
-          className={`file-tab ${activeFile === index ? 'active-tab' : 'inactive-tab'}`}
-          onClick={() => setActiveFile(index)}
-        >
-          <FileText className="file-icon" />
-          <span className="file-name">{file.name}</span>
-          {files.length > 1 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                closeFile(index);
-              }}
-              className="close-button"
+      {/* File Tabs */}
+      <div className="file-tabs">
+        <div className="file-list">
+          {files.map((file, index) => (
+            <div
+              key={file.id}
+              className={`file-tab ${
+                activeFile === index ? "active-tab" : "inactive-tab"
+              }`}
+              onClick={() => setActiveFile(index)}
             >
-              <X className="close-icon" />
-            </button>
-          )}
+              <FileText className="file-icon" />
+              <span className="file-name">{file.name}</span>
+              {files.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    closeFile(index);
+                  }}
+                  className="close-button"
+                >
+                  <X className="close-icon" />
+                </button>
+              )}
+            </div>
+          ))}
+          <button onClick={addNewFile} className="add-button">
+            <Plus className="add-icon" />
+          </button>
         </div>
-      ))}
-      <button
-        onClick={addNewFile}
-        className="add-button"
-      >
-        <Plus className="add-icon" />
-      </button>
-    </div>
 
-    <div className="run-wrapper">
-      <button onClick={onRun} className="run-button">
-        <Play className="run-icon" />
-        <span>Run</span>
-      </button>
-    </div>
-  </div>
-
-  {/* Code Editor */}
-  <div className="code-editor">
-    {/* Line Numbers */}
-    <div className="line-numbers">
-      {lines.map((_, index) => (
-        <div key={index} className="line-number">
-          {index + 1}
+        <div className="run-wrapper">
+           <button onClick={onDownload} className="action-button" title="Download">
+                    <Download className="icon" />
+                  </button>
+                  <button onClick={onCopy  } className="action-button" title="Copy">
+                    <Copy className="icon" />
+                  </button>
+                  <button onClick={onReset} className="action-button" title="Reset">
+          <RotateCcw className="icon" />
+        </button>
+          <button onClick={onRun} className="run-button">
+            <Play className="run-icon" />
+            <span>Run</span>
+          </button>
         </div>
-      ))}
-    </div>
+      </div>
 
-    {/* Code Area */}
-    <div className="code-area">
-      <textarea
-        value={code}
-        onChange={(e) => handleCodeChange(e.target.value)}
-        className="code-textarea"
-        placeholder="Write your code here..."
-        spellCheck={false}
-        style={{
-          fontFamily:
-            'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
-          tabSize: 4
-        }}
-      />
-    </div>
-  </div>
+      {/* Code Editor */}
+      <div className="code-editor">
+        {/* Line Numbers */}
+        <div className="line-numbers">
+          {lines.map((_, index) => (
+            <div key={index} className="line-number">
+              {index + 1}
+            </div>
+          ))}
+        </div>
 
-  {/* Status Bar */}
-  <div className="status-bar">
-    <div className="status-left">
-      <span>Line {cursorPosition.line}, Column {cursorPosition.column}</span>
-      <span>UTF-8</span>
-      <span>{language.toUpperCase()}</span>
+        {/* Code Area */}
+        <div className="code-area">
+          {/* <Editor
+              theme={editorState.theme}
+              defaultLanguage={language}
+              // defaultValue={editorState.value}  
+            /> */}
+          <textarea
+            value={code}
+            onChange={(e) => handleCodeChange(e.target.value)}
+            className="code-textarea"
+            placeholder="Write your code here..."
+            spellCheck={false}
+            style={{
+              fontFamily:
+                'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
+              tabSize: 4,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Status Bar */}
+      <div className="status-bar">
+        <div className="status-left">
+          <span>
+            Line {cursorPosition.line}, Column {cursorPosition.column}
+          </span>
+          <span>UTF-8</span>
+          <span>{language.toUpperCase()}</span>
+        </div>
+        <div className="status-right">
+          <span>Spaces: 4</span>
+          <span>Lines: {lines.length}</span>
+        </div>
+      </div>
     </div>
-    <div className="status-right">
-      <span>Spaces: 4</span>
-      <span>Lines: {lines.length}</span>
-    </div>
-  </div>
-</div>
   );
 };
 

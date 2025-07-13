@@ -1,36 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
   html {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, sans-serif;
   }
-  
-  code, pre, textarea[class*="mono"] {
-    font-family: 'JetBrains Mono', 'Fira Code', Monaco, Consolas, 'Courier New', monospace;
+
+  code,
+  pre,
+  textarea[class*="mono"] {
+    font-family: "JetBrains Mono", "Fira Code", Monaco, Consolas, "Courier New",
+      monospace;
   }
 }
-
+body {
+  margin: 0px;
+}
 @layer components {
   .scrollbar-thin {
     scrollbar-width: thin;
     scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: rgba(156, 163, 175, 0.5);
     border-radius: 3px;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background-color: rgba(156, 163, 175, 0.7);
   }
@@ -38,7 +40,8 @@
 
 /* Custom transitions for theme switching */
 * {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 /* Code editor enhancements */
@@ -115,7 +118,8 @@ textarea:focus-visible {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -125,7 +129,8 @@ textarea:focus-visible {
 
 /* Console output styling */
 .console-output {
-  font-family: 'JetBrains Mono', 'Fira Code', Monaco, Consolas, 'Courier New', monospace;
+  font-family: "JetBrains Mono", "Fira Code", Monaco, Consolas, "Courier New",
+    monospace;
   font-size: 0.875rem;
   line-height: 1.5;
 }

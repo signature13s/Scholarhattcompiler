@@ -1,6 +1,7 @@
-import React from 'react';
-import { Code, Terminal } from 'lucide-react';
+import React, { useState } from 'react';
+import { Code, Terminal, ChevronLeftCircleIcon, ChevronRightCircleIcon } from 'lucide-react';
 import './LanguageSelector.css'
+
 interface Language {
   id: string;
   name: string;
@@ -26,48 +27,59 @@ const languages: Language[] = [
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   selectedLanguage,
-  onLanguageChange
 }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
-   <div className="sidebar">
-  <div className="sidebar-header">
-    <div className="sidebar-title">
-      <Code className="sidebar-title-icon" />
-      <h2 className="sidebar-title-text">Languages</h2>
-    </div>
-  </div>
+    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      <div className="sidebar-header">
+        <div className="sidebar-title">
+          <Code className="sidebar-title-icon" />
+          {!isCollapsed && <h2 className="sidebar-title-text">Languages</h2>}
+        </div>
+        
+      </div>
 
-  <div className="sidebar-content">
-    <div className="language-list">
-      {languages.map((language) => (
-        <button
-          key={language.id}
-          onClick={() => onLanguageChange(language.id)}
-          className={`language-button ${selectedLanguage === language.id ? 'active' : ''}`}
-        >
-          <div className={`language-icon ${language.color}`}>
-            {language.icon}
-          </div>
-          <span className="language-name">{language.name}</span>
+      <div className="sidebar-content">
+        <div className="language-list">
+          {languages.map((language) => (
+            <a href={`/compiler/${language.id}`} target='_main' key={language.id}>
+              <button
+                className={`language-button ${selectedLanguage === language.id ? 'active' : ''}`}
+              >
+                <div className={`language-icon ${language.color}`}>
+                  {language.icon}
+                </div>
+                {!isCollapsed && <span className="language-name">{language.name}</span>}
+              </button>
+            </a>
+          ))}
+        </div>
+        <button className={`toggle-button  ${isCollapsed ? 'collapsed' : ''}`} onClick={toggleSidebar}>
+          {isCollapsed ? <ChevronRightCircleIcon /> : <ChevronLeftCircleIcon />}
         </button>
-      ))}
-    </div>
-  </div>
+      </div>
 
-  <div className="sidebar-footer">
-    <div className="shortcuts-info">
-      <div className="shortcut-header">
-        <Terminal className="shortcut-icon" />
-        <span>Shortcuts:</span>
-      </div>
-      <div className="shortcut-list">
-        <div>Ctrl+Enter: Run code</div>
-        <div>Ctrl+S: Save file</div>
-        <div>Ctrl+/: Comment</div>
-      </div>
+      {!isCollapsed && (
+        <div className="sidebar-footer">
+          <div className="shortcuts-info">
+            <div className="shortcut-header">
+              <Terminal className="shortcut-icon" />
+              <span>Shortcuts:</span>
+            </div>
+            <div className="shortcut-list">
+              <div>Ctrl+Enter: Run code</div>
+              <div>Ctrl+S: Save file</div>
+              <div>Ctrl+/: Comment</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  </div>
-</div>
   );
 };
 

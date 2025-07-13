@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Terminal, FileInput, ChevronDown, ChevronUp, Play, Trash2 } from 'lucide-react';
 import './InputOutput.css';
 interface InputOutputPanelProps {
-  output: string;
+  Output: any;
   onInputChange: (input: string) => void;
   onRun: () => void;
 }
 
-const InputOutputPanel: React.FC<InputOutputPanelProps> = ({ output, onInputChange, onRun }) => {
+const InputOutputPanel: React.FC<InputOutputPanelProps> = ({ Output, onInputChange, onRun }) => {
   const [input, setInput] = useState('');
   const [isInputExpanded, setIsInputExpanded] = useState(true);
   const [isOutputExpanded, setIsOutputExpanded] = useState(true);
@@ -21,33 +21,42 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({ output, onInputChan
     // This would typically clear the output in the parent component
   };
 
-  const formatOutput = (text: string) => {
-    const lines = text.split('\n');
-    return lines.map((line, index) => {
-      if (line.startsWith('Error:') || line.startsWith('Exception:')) {
-        return (
-          <div key={index} className="log-error">
-  {line}
-</div>
-        );
-      } else if (line.startsWith('Warning:')) {
-        return (
-         <div key={index} className="log-warning">
-  {line}
-</div>
-        );
-      } else if (line.startsWith('Success:')) {
-        return (
-          <div key={index} className="log-success">
-  {line}
-</div>
-        );
-      }
-      return <div key={index} className="log-default">
-  {line}
-</div>
-    });
-  };
+const formatTerminalOutput = (result: { status: string; timeTaken: string; memoryUsed: string; output: string[] }) => {
+  const { status, timeTaken, memoryUsed, output } = result;
+
+  // Format header
+  const headerLines = [
+    `Execution code ...`
+  ];
+const outputLines = Array.isArray(output) ? output : [];
+  const allLines = [...headerLines, ...outputLines]
+  return allLines.map((line, index) => {
+    if (status =='Error' || status =='error') {
+      return (
+        <div key={index} className="log-error">
+          {line}
+        </div>
+      );
+    } else if (status =='Warning' || status =='warning') {
+      return (
+        <div key={index} className="log-warning">
+          {line}
+        </div>
+      );
+    } else if (status =='Success' || status =='success') {
+      return (
+        <div key={index} className="log-success">
+          {line}
+        </div>
+      );
+    }
+    return (
+      <div key={index} className="log-default">
+        {line}
+      </div>
+    );
+  });
+};
 
   return (
     <div className="io-wrapper">
@@ -81,7 +90,7 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({ output, onInputChan
         />
         <div className="input-footer">
           <span className="input-count">{input.length} characters</span>
-          <button onClick={onRun} className="run-button">
+          <button onClick={onRun} className="run-buttonio">
             <Play className="icon-sm" />
             <span>Run</span>
           </button>
@@ -109,7 +118,7 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({ output, onInputChan
           className="clear-button"
           title="Clear output"
         >
-          <Trash2 className="icon-sm" />
+          <Trash2 className="icon-sm-clear" />
         </button>
         {isOutputExpanded ? (
           <ChevronUp className="chevron-icon" />
@@ -122,8 +131,8 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({ output, onInputChan
     {isOutputExpanded && (
       <div className="output-body">
         <div className="output-box">
-          {output ? (
-            <div className="output-content">{formatOutput(output)}</div>
+          {Output ? (
+            <div className="output-content">{formatTerminalOutput(Output)}</div>
           ) : (
             <div className="output-placeholder">Click "Run" to see output...</div>
           )}
@@ -139,7 +148,8 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({ output, onInputChan
         <span>Console</span>
         <span className="status-ready">Ready</span>
       </div>
-      <div className="console-time">Execution time: 0.245s</div>
+      <div className="console-time">Execution time: {Output? Output?.timeTaken+" Seconds":""}</div>
+      <div className="console-time">Memory Used: {Output? Output?.memoryUsed+" KB":" "}</div>
     </div>
   </div>
 </div>
