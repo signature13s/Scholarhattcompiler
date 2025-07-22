@@ -1,12 +1,7 @@
 .header {
-  background-color: white;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0.75rem 1rem;
-}
-
-.header.dark {
   background-color: #111827;
-  border-color: #374151;
+  border-bottom: 1px solid #374151;
+  padding: 0.75rem 1rem;
 }
 
 .header-container {
@@ -30,20 +25,12 @@
 .brand-icon {
   width: 2rem;
   height: 2rem;
-  color: #2563eb;
-}
-
-.brand.dark .brand-icon {
   color: #60a5fa;
 }
 
 .brand-name {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #111827;
-}
-
-.brand.dark .brand-name {
   color: white;
 }
 
@@ -64,19 +51,11 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.875rem;
-  color: #374151;
+  color: #d1d5db;
   transition: color 0.2s;
 }
 
 .nav-link:hover {
-  color: #2563eb;
-}
-
-.nav-link.dark {
-  color: #d1d5db;
-}
-
-.nav-link.dark:hover {
   color: #60a5fa;
 }
 
@@ -130,7 +109,7 @@
 }
 
 .cta-button {
-  background-color: #2563eb;
+  background-color: #16a34a;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;

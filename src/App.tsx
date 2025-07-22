@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
-import LanguageSelector from "./components/LanguageSelector";
-import CodeEditor from "./components/CodeEditor";
-import InputOutputPanel from "./components/InputOutputPanel";
-import ResizablePanel from "./components/ResizablePanel";
-import MobileToolbar from "./components/MobileToolbar";
+import Header from "./components/Header.tsx";
+import LanguageSelector from "./components/LanguageSelector.tsx";
+import CodeEditor from "./components/CodeEditor.tsx";
+import InputOutputPanel from "./components/InputOutputPanel.tsx";
+import ResizablePanel from "./components/ResizablePanel.tsx";
+import MobileToolbar from "./components/MobileToolbar.tsx";
 import "./App.css";
-import { SANDBOX_ID, SANDBOX_CODE_ID, SAMPLE_CODE } from "./helpers/constant.ts";
+import {
+  SANDBOX_ID,
+  SANDBOX_CODE_ID,
+  SAMPLE_CODE,
+} from "./helpers/constant.ts";
 import UtilService from "./helpers/util.ts";
 import EditorService from "./services/editor.service.ts";
 
@@ -56,103 +60,106 @@ function getSandBoxCode(codeId: string) {
 }
 const AppContent: React.FC = () => {
   const params = useParams();
-  const editorRef = useRef(null);
-  const [selectedLanguage, setSelectedLanguage] = useState(params.lang);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(
+    params?.lang || ""
+  );
   const [input, setInput] = useState("");
-  const [output, setOutput] = useState();
+  const [output, setOutput] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [data, setData] = useState(" ");
   const sandboxId = getSandBoxId();
   const code = getSandBoxCode(params.id);
 
   const [editorState, setEditorState] = useState({
-      user: sandboxId,
-      file: SANDBOX_ID,
-      language: params.lang, //csharp, java, python, javascript, typescript
-      code: SAMPLE_CODE.find((snippet)=>snippet.language==params.lang)?.content || '',
-      input: input?.length > 0 ? input.split("\n") : [],
-      downloadFile: 'code.txt'
-    });
-  function toTitleCase(str: any) {
-    switch (str) {
-      case "csharp":
-        return "C#";
-      case "cpp":
-        return "C++";
-      default:
-        return str.replace(/\w\S*/g, function (txt: any) {
-          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-    }
-  }
-  function getCourse(category: any) {
-    switch (category) {
-      case "c":
-        return "/free-course/c-course-for-beginners";
-      case "cpp":
-        return "/free-course/cpp-course-for-beginners";
-      case "csharp":
-        return "/free-course/csharp-course-for-beginners";
-      case "html":
-        return "/free-course/html-course";
-      case "javascript":
-        return "/free-course/java-course";
-      case "typescript":
-        return "/free-course/typescript-course";
-      case "java":
-        return "/free-course/java-course";
-      case "python":
-        return "/free-course/python-course-for-beginners";
-      case "kotlin":
-        return "";
-    }
-  }
+    user: sandboxId,
+    file: SANDBOX_ID,
+    language: params.lang, //csharp, java, python, javascript, typescript
+    code:
+      SAMPLE_CODE.find((snippet) => snippet.language == params.lang)?.content ||
+      "",
+    input: input?.length > 0 ? input.split("\n") : [],
+    downloadFile: "code.txt",
+  });
+  // function toTitleCase(str: any) {
+  //   switch (str) {
+  //     case "csharp":
+  //       return "C#";
+  //     case "cpp":
+  //       return "C++";
+  //     default:
+  //       return str.replace(/\w\S*/g, function (txt: any) {
+  //         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  //       });
+  //   }
+  // }
+  // function getCourse(category: any) {
+  //   switch (category) {
+  //     case "c":
+  //       return "/free-course/c-course-for-beginners";
+  //     case "cpp":
+  //       return "/free-course/cpp-course-for-beginners";
+  //     case "csharp":
+  //       return "/free-course/csharp-course-for-beginners";
+  //     case "html":
+  //       return "/free-course/html-course";
+  //     case "javascript":
+  //       return "/free-course/java-course";
+  //     case "typescript":
+  //       return "/free-course/typescript-course";
+  //     case "java":
+  //       return "/free-course/java-course";
+  //     case "python":
+  //       return "/free-course/python-course-for-beginners";
+  //     case "kotlin":
+  //       return "";
+  //   }
+  // }
 
-  function getSkillTest(category: any) {
-    switch (category) {
-      case "c":
-        return "/skill-challenge";
-      case "cpp":
-        return "/skill-challenge";
-      case "csharp":
-        return "/skill-challenge/csharp";
-      case "html":
-        return "/skill-challenge/html";
-      case "javascript":
-        return "/skill-challenge/javascript";
-      case "typescript":
-        return "/skill-challenge/typescript";
-      case "java":
-        return "/skill-challenge";
-      case "kotlin":
-        return "/skill-challenge";
+  // function getSkillTest(category: any) {
+  //   switch (category) {
+  //     case "c":
+  //       return "/skill-challenge";
+  //     case "cpp":
+  //       return "/skill-challenge";
+  //     case "csharp":
+  //       return "/skill-challenge/csharp";
+  //     case "html":
+  //       return "/skill-challenge/html";
+  //     case "javascript":
+  //       return "/skill-challenge/javascript";
+  //     case "typescript":
+  //       return "/skill-challenge/typescript";
+  //     case "java":
+  //       return "/skill-challenge";
+  //     case "kotlin":
+  //       return "/skill-challenge";
 
-      case "python":
-        return "/skill-challenge";
-    }
-  }
-  function getTutorial(category: any) {
-    switch (category) {
-      case "c":
-        return "/tutorial/c";
-      case "cpp":
-        return "/tutorial/cpp";
-      case "csharp":
-        return "/tutorial/csharp";
-      case "html":
-        return "/tutorial/html";
-      case "javascript":
-        return "/tutorial/javascript";
-      case "typescript":
-        return "/tutorial/typescript";
-      case "java":
-        return "/tutorial/java";
-      case "kotlin":
-        return "/tutorial/kotlin";
-      case "python":
-        return "/tutorial/python";
-    }
-  }
+  //     case "python":
+  //       return "/skill-challenge";
+  //   }
+  // }
+  // function getTutorial(category: any) {
+  //   switch (category) {
+  //     case "c":
+  //       return "/tutorial/c";
+  //     case "cpp":
+  //       return "/tutorial/cpp";
+  //     case "csharp":
+  //       return "/tutorial/csharp";
+  //     case "html":
+  //       return "/tutorial/html";
+  //     case "javascript":
+  //       return "/tutorial/javascript";
+  //     case "typescript":
+  //       return "/tutorial/typescript";
+  //     case "java":
+  //       return "/tutorial/java";
+  //     case "kotlin":
+  //       return "/tutorial/kotlin";
+  //     case "python":
+  //       return "/tutorial/python";
+  //   }
+  // }
 
   // useEffect(() => {
   //   let language = toTitleCase(params.lang);
@@ -175,7 +182,7 @@ const AppContent: React.FC = () => {
     currentState.input = input?.length > 0 ? input.split("\n") : [];
     setEditorState(currentState);
     //disable run button
-      
+
     const model = {
       file: editorState.user,
       code: code,
@@ -196,7 +203,7 @@ const AppContent: React.FC = () => {
             model.code,
             model.input,
             wordsToCheck,
-            setOutput,
+            setOutput
           );
           if (isValid) {
             EditorService.RunCode(model)
@@ -227,14 +234,15 @@ const AppContent: React.FC = () => {
           isValid = UtilService.CheckCode(
             model.code,
             model.input,
-            wordsToCheck,setOutput
+            wordsToCheck,
+            setOutput
           );
           if (isValid) {
             EditorService.RunCode(model)
               .then((res) => {
                 if (res != undefined) {
                   setOutput(res.data);
-                  console.log(res.data)
+                  console.log(res.data);
                 } else {
                   setOutput("Something went wrong, please try again.");
                 }
@@ -250,7 +258,8 @@ const AppContent: React.FC = () => {
           isValid = UtilService.CheckCode(
             model.code,
             model.input,
-            wordsToCheck,setOutput
+            wordsToCheck,
+            setOutput
           );
           if (isValid) {
             EditorService.RunCode(model)
@@ -272,7 +281,8 @@ const AppContent: React.FC = () => {
           isValid = UtilService.CheckCode(
             model.code,
             model.input,
-            wordsToCheck,setOutput
+            wordsToCheck,
+            setOutput
           );
           if (isValid) {
             EditorService.RunCode(model)
@@ -294,7 +304,8 @@ const AppContent: React.FC = () => {
           isValid = UtilService.CheckCode(
             model.code,
             model.input,
-            wordsToCheck,setOutput
+            wordsToCheck,
+            setOutput
           );
           if (isValid) {
             EditorService.RunCode(model)
@@ -357,23 +368,23 @@ const AppContent: React.FC = () => {
         default:
           break;
       }
-    } 
+    }
   };
-//   const runCode = () => {
-//     setOutput("Compiling...\n");
+  //   const runCode = () => {
+  //     setOutput("Compiling...\n");
 
-//     // Simulate compilation and execution
-//     setTimeout(() => {
-//       const sampleOutput = `Hello, World!
-// The answer is: 42
-// Sum of 1-10: 55
+  //     // Simulate compilation and execution
+  //     setTimeout(() => {
+  //       const sampleOutput = `Hello, World!
+  // The answer is: 42
+  // Sum of 1-10: 55
 
-// Success: Program executed successfully
-// Execution time: 0.245s
-// Memory usage: 15.2 MB`;
-//       setOutput(sampleOutput);
-//     }, 1000);
-//   };
+  // Success: Program executed successfully
+  // Execution time: 0.245s
+  // Memory usage: 15.2 MB`;
+  //       setOutput(sampleOutput);
+  //     }, 1000);
+  //   };
 
   const downloadCode = () => {
     // Simulate download functionality
@@ -385,10 +396,9 @@ const AppContent: React.FC = () => {
     console.log("Copying code to clipboard...");
   };
 
-
   const resetCode = () => {
-    setOutput("");
-    setInput("");
+    // setOutput("");
+    // setInput("");
   };
 
   // Handle keyboard shortcuts
@@ -437,11 +447,11 @@ const AppContent: React.FC = () => {
         <div className="codeeditor-container">
           <div className="code-editor-wrapper">
             <CodeEditor
-            editorstate={editorState}
-            seteditorstate={setEditorState}
-            data={data}
-            setData={setData}
-            user={SANDBOX_ID}
+              editorstate={editorState}
+              seteditorstate={setEditorState}
+              data={data}
+              setData={setData}
+              user={SANDBOX_ID}
               language={selectedLanguage}
               onRun={runCode}
               onDownload={downloadCode}
@@ -479,7 +489,7 @@ const AppContent: React.FC = () => {
       <MobileToolbar
         onRun={runCode}
         onDownload={downloadCode}
-        onCopy={copyCode}      
+        onCopy={copyCode}
         onReset={resetCode}
         onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />

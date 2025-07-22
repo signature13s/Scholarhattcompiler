@@ -1,51 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { Play, FileText, X, Plus, Download, Copy, RotateCcw } from "lucide-react";
-import "./Editor.css";
-import Editor from '@monaco-editor/react';
+import {
+  Play,
+  FileText,
+  X,
+  Plus,
+  Download,
+  Copy,
+  RotateCcw,
+} from "lucide-react";
+import "../assets/CSS/Editor.css";
+import Editor from "@monaco-editor/react";
 
-import {SAMPLE_CODE} from '../helpers/constant'
+import { SAMPLE_CODE } from "../helpers/constant";
 interface CodeEditorProps {
   language: string;
   onRun: () => void;
-  onDownload: () => void; onCopy: () => void; onReset: () => void;
-  data:string;
-  setData: ()=>{};
-    user:string;
-    seteditorstate:any;
-    editorstate:{
-          user: string,
-          file: string,
-          language: string, //csharp, java, python, javascript, typescript
-          code: string,
-          input: [],
-          downloadFile:string,
-        }
+  onDownload: () => void;
+  onCopy: () => void;
+  onReset: () => void;
+  data: string;
+  setData: any;
+  user: string;
+  seteditorstate: any;
+  editorstate: {
+    user: string;
+    file: string;
+    language: string; //csharp, java, python, javascript, typescript
+    code: string | undefined;
+    input: [];
+    downloadFile: string;
+  };
 }
 
 interface FileTab {
   id: string;
   name: string;
-  content: string ;
+  content: string | undefined;
   language: string;
-
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, onCopy, onReset,setData,data,editorstate,seteditorstate}) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  language,
+  onRun,
+  onDownload,
+  onCopy,
+  onReset,
+
+  editorstate,
+  seteditorstate,
+}) => {
   const [activeFile, setActiveFile] = useState(0);
-  const [files, setFiles] = useState<FileTab[]>(SAMPLE_CODE.filter((snippet)=>snippet.language==language));
+  const [files, setFiles] = useState<FileTab[]>(
+    SAMPLE_CODE.filter((snippet) => snippet.language == language)
+  );
   const [code, setCode] = useState(files[0].content);
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
 
-
-  function runcode(){
-
+  function runcode() {
     const currentState = editorstate;
     currentState.code = code;
-    currentState.input = files;
     seteditorstate(currentState);
   }
   useEffect(() => {
-    runcode()
+    runcode();
     setCode(files[activeFile].content);
   }, [activeFile, files]);
 
@@ -60,7 +77,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, on
     const newFile: FileTab = {
       id: Date.now().toString(),
       name: `file${files.length + 1}.${language}`,
-      content: SAMPLE_CODE.find((snippet)=>snippet.language==language)?.content,
+      content: SAMPLE_CODE.find((snippet) => snippet.language == language)
+        ?.content,
       language: language,
     };
     setFiles([...files, newFile]);
@@ -77,7 +95,42 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, on
     }
   };
 
-  const lines = code.split("\n");
+  const lines = code?.split("\n");
+  const handleEditorWillMount = (monaco: any) => {
+    monaco.editor.defineTheme("monaco-111827-dark", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [
+        { token: "", foreground: "D4D4D4", background: "111827" },
+        { token: "comment", foreground: "6A9955", fontStyle: "italic" },
+        { token: "string", foreground: "CE9178" },
+        { token: "variable", foreground: "9CDCFE" },
+        { token: "keyword", foreground: "C586C0" },
+        { token: "number", foreground: "B5CEA8" },
+        { token: "type.identifier", foreground: "4EC9B0" },
+        { token: "function", foreground: "DCDCAA" },
+      ],
+      colors: {
+        "editor.background": "#111827",
+        "editor.foreground": "#D4D4D4",
+        "editorLineNumber.foreground": "#5B6B80",
+        "editorLineNumber.activeForeground": "#9CDCFE",
+        "editorCursor.foreground": "#FFFFFF",
+        "editor.selectionBackground": "#264F78",
+        "editor.inactiveSelectionBackground": "#3A3D41",
+
+        // 🔧 Fix white gutter (glyph margin)
+        "editorGutter.background": "#111827",
+        "editorGutter.modifiedBackground": "#1B1F23",
+        "editorGutter.addedBackground": "#1B1F23",
+        "editorGutter.deletedBackground": "#1B1F23",
+      },
+    });
+  };
+
+  const handleEditorDidMount = (editor: any, monaco: any) => {
+    monaco.editor.setTheme("monaco-111827-dark");
+  };
 
   return (
     <div className="editor-container">
@@ -113,15 +166,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, on
         </div>
 
         <div className="run-wrapper">
-           <button onClick={onDownload} className="action-button" title="Download">
-                    <Download className="icon" />
-                  </button>
-                  <button onClick={onCopy  } className="action-button" title="Copy">
-                    <Copy className="icon" />
-                  </button>
-                  <button onClick={onReset} className="action-button" title="Reset">
-          <RotateCcw className="icon" />
-        </button>
+          <button
+            onClick={onDownload}
+            className="action-button"
+            title="Download"
+          >
+            <Download className="icon" />
+          </button>
+          <button onClick={onCopy} className="action-button" title="Copy">
+            <Copy className="icon" />
+          </button>
+          <button onClick={onReset} className="action-button" title="Reset">
+            <RotateCcw className="icon" />
+          </button>
           <button onClick={onRun} className="run-button">
             <Play className="run-icon" />
             <span>Run</span>
@@ -139,15 +196,30 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, on
             </div>
           ))}
         </div>
-
         {/* Code Area */}
         <div className="code-area">
-          {/* <Editor
-              theme={editorState.theme}
-              defaultLanguage={language}
-              // defaultValue={editorState.value}  
-            /> */}
-          <textarea
+          <Editor
+            height="calc(100vh - 140px)" // or "400px", or whatever fits your layout
+            language={language} // or "python", "typescript", etc.
+            value={code}
+            onChange={(values) => handleCodeChange(values)}
+            beforeMount={handleEditorWillMount}
+            onMount={handleEditorDidMount}
+            theme="monaco-111827-dark"
+            options={{
+              fontSize: 14,
+              fontFamily:
+                'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
+              minimap: { enabled: false },
+              lineNumbers: "off",
+              tabSize: 4,
+              automaticLayout: true,
+              scrollBeyondLastLine: false,
+              wordWrap: "on",
+              padding: { top: 10 },
+            }}
+          />
+          {/* <textarea
             value={code}
             onChange={(e) => handleCodeChange(e.target.value)}
             className="code-textarea"
@@ -158,12 +230,12 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, on
                 'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
               tabSize: 4,
             }}
-          />
+          /> */}
         </div>
       </div>
 
       {/* Status Bar */}
-      <div className="status-bar">
+      {/* <div className="status-bar">
         <div className="status-left">
           <span>
             Line {cursorPosition.line}, Column {cursorPosition.column}
@@ -175,7 +247,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language, onRun, onDownload, on
           <span>Spaces: 4</span>
           <span>Lines: {lines.length}</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

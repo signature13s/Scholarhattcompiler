@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
-import { Code, Terminal, ChevronLeftCircleIcon, ChevronRightCircleIcon } from 'lucide-react';
-import './LanguageSelector.css'
+import React, { useState } from "react";
+import {
+  Code,
+  Terminal,
+  ChevronLeftCircleIcon,
+  ChevronRightCircleIcon,
+} from "lucide-react";
+import "../assets/CSS/LanguageSelector.css";
 
 interface Language {
   id: string;
@@ -15,14 +20,14 @@ interface LanguageSelectorProps {
 }
 
 const languages: Language[] = [
-  { id: 'python', name: 'Python', icon: '🐍', color: 'bg-yellow-500' },
-  { id: 'java', name: 'Java', icon: '☕', color: 'bg-red-500' },
-  { id: 'c', name: 'C', icon: '©', color: 'bg-blue-500' },
-  { id: 'cpp', name: 'C++', icon: '⚡', color: 'bg-blue-600' },
-  { id: 'csharp', name: 'C#', icon: '#', color: 'bg-purple-600' },
-  { id: 'javascript', name: 'JavaScript', icon: 'JS', color: 'bg-yellow-400' },
-  { id: 'typescript', name: 'TypeScript', icon: 'TS', color: 'bg-blue-500' },
-  { id: 'html', name: 'HTML', icon: '<>', color: 'bg-orange-500' },
+  { id: "python", name: "Python", icon: "🐍", color: "bg-yellow-500" },
+  { id: "java", name: "Java", icon: "☕", color: "bg-red-500" },
+  { id: "c", name: "C", icon: "©", color: "bg-blue-500" },
+  { id: "cpp", name: "C++", icon: "⚡", color: "bg-blue-600" },
+  { id: "csharp", name: "C#", icon: "#", color: "bg-purple-600" },
+  { id: "javascript", name: "JavaScript", icon: "JS", color: "bg-yellow-400" },
+  { id: "typescript", name: "TypeScript", icon: "TS", color: "bg-blue-500" },
+  { id: "html", name: "HTML", icon: "<>", color: "bg-orange-500" },
 ];
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({
@@ -35,31 +40,41 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   };
 
   return (
-    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+    <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="sidebar-header">
         <div className="sidebar-title">
           <Code className="sidebar-title-icon" />
           {!isCollapsed && <h2 className="sidebar-title-text">Languages</h2>}
         </div>
-        
       </div>
 
       <div className="sidebar-content">
         <div className="language-list">
           {languages.map((language) => (
-            <a href={`/compiler/${language.id}`} target='_main' key={language.id}>
+            <a
+              href={`/compiler/${language.id}`}
+              target="_main"
+              key={language.id}
+            >
               <button
-                className={`language-button ${selectedLanguage === language.id ? 'active' : ''}`}
+                className={`language-button ${
+                  selectedLanguage === language.id ? "active" : ""
+                }`}
               >
                 <div className={`language-icon ${language.color}`}>
                   {language.icon}
                 </div>
-                {!isCollapsed && <span className="language-name">{language.name}</span>}
+                {!isCollapsed && (
+                  <span className="language-name">{language.name}</span>
+                )}
               </button>
             </a>
           ))}
         </div>
-        <button className={`toggle-button  ${isCollapsed ? 'collapsed' : ''}`} onClick={toggleSidebar}>
+        <button
+          className={`toggle-button  ${isCollapsed ? "collapsed" : ""}`}
+          onClick={toggleSidebar}
+        >
           {isCollapsed ? <ChevronRightCircleIcon /> : <ChevronLeftCircleIcon />}
         </button>
       </div>

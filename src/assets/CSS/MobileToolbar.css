@@ -1,13 +1,8 @@
 .mobile-toolbar {
   display: block;
-  background-color: white;
-  border-top: 1px solid #e5e7eb;
-  padding: 0.5rem;
-}
-
-.mobile-toolbar.dark {
   background-color: #111827;
-  border-color: #374151;
+  border-top: 1px solid #374151;
+  padding: 0.5rem;
 }
 
 @media (min-width: 768px) {
@@ -25,20 +20,11 @@
 .toolbar-icon-button {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  color: #4b5563;
+  color: #d1d5db;
   transition: all 0.2s ease-in-out;
 }
 
 .toolbar-icon-button:hover {
-  color: #2563eb;
-  background-color: #f3f4f6;
-}
-
-.toolbar-icon-button.dark {
-  color: #d1d5db;
-}
-
-.toolbar-icon-button.dark:hover {
   color: #60a5fa;
   background-color: #1f2937;
 }

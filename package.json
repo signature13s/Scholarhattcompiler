@@ -13,6 +13,7 @@
     "@codesandbox/sandpack-react": "^2.20.0",
     "@microsoft/signalr": "^8.0.7",
     "@monaco-editor/react": "^4.7.0",
+    "@tailwindcss/vite": "^4.1.11",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
     "axios": "^1.10.0",
@@ -22,7 +23,8 @@
     "react-resizable-panels": "^3.0.3",
     "react-router-dom": "^7.6.3",
     "sandpack-file-explorer": "^0.0.7",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

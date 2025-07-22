@@ -1,3 +1,5 @@
+/* @import "tailwindcss"; */
+
 @layer base {
   html {
     font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
@@ -11,9 +13,24 @@
       monospace;
   }
 }
+
 body {
   margin: 0px;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+  z-index: 50;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e3a8a;
+}
+
 @layer components {
   .scrollbar-thin {
     scrollbar-width: thin;
@@ -55,45 +72,24 @@ body {
 }
 
 /* Syntax highlighting colors for dark theme */
-.dark .syntax-keyword {
+.syntax-keyword {
   color: #c678dd;
 }
 
-.dark .syntax-string {
+.syntax-string {
   color: #98c379;
 }
 
-.dark .syntax-comment {
+.syntax-comment {
   color: #5c6370;
 }
 
-.dark .syntax-number {
+.syntax-number {
   color: #d19a66;
 }
 
-.dark .syntax-function {
-  color: #61afef;
-}
-
-/* Light theme syntax highlighting */
-.syntax-keyword {
-  color: #a626a4;
-}
-
-.syntax-string {
-  color: #50a14f;
-}
-
-.syntax-comment {
-  color: #a0a1a7;
-}
-
-.syntax-number {
-  color: #986801;
-}
-
 .syntax-function {
-  color: #4078f2;
+  color: #61afef;
 }
 
 /* Mobile responsiveness */

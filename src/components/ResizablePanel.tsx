@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './ResizablePanel.css'
+import React, { useState, useRef, useEffect } from "react";
+import "../assets/CSS/ResizablePanel.css";
 interface ResizablePanelProps {
   children: React.ReactNode;
   minWidth?: number;
@@ -13,7 +13,7 @@ const ResizablePanel: React.FC<ResizablePanelProps> = ({
   minWidth = 300,
   maxWidth = 800,
   defaultWidth = 480,
-  className = ''
+  className = "",
 }) => {
   const [width, setWidth] = useState(defaultWidth);
   const [isResizing, setIsResizing] = useState(false);
@@ -25,10 +25,10 @@ const ResizablePanel: React.FC<ResizablePanelProps> = ({
     setIsResizing(true);
     startXRef.current = e.clientX;
     startWidthRef.current = width;
-    
+
     // Prevent text selection during resize
-    document.body.style.userSelect = 'none';
-    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "col-resize";
   };
 
   useEffect(() => {
@@ -40,49 +40,49 @@ const ResizablePanel: React.FC<ResizablePanelProps> = ({
         Math.max(startWidthRef.current + deltaX, minWidth),
         maxWidth
       );
-      
+
       setWidth(newWidth);
     };
 
     const handleMouseUp = () => {
       setIsResizing(false);
-      document.body.style.userSelect = '';
-      document.body.style.cursor = '';
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
     };
 
     if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isResizing, minWidth, maxWidth]);
 
   return (
-   <div className="resizable-wrapper">
-  {/* Resize Handle */}
-  <div
-    className={`resize-handle ${isResizing ? 'resizing' : ''}`}
-    onMouseDown={handleMouseDown}
-    style={{ minHeight: '100%' }}
-  >
-    <div className="resize-handle-inner">
-      <div className="resize-bar"></div>
-    </div>
-  </div>
+    <div className="resizable-wrapper">
+      {/* Resize Handle */}
+      <div
+        className={`resize-handle ${isResizing ? "resizing" : ""}`}
+        onMouseDown={handleMouseDown}
+        style={{ minHeight: "100%" }}
+      >
+        <div className="resize-handle-inner">
+          <div className="resize-bar"></div>
+        </div>
+      </div>
 
-  {/* Panel Content */}
-  <div
-    ref={panelRef}
-    className="resizable-panel"
-    style={{ width: `${width}px` }}
-  >
-    {children}
-  </div>
-</div>
+      {/* Panel Content */}
+      <div
+        ref={panelRef}
+        className="resizable-panel"
+        style={{ width: `${width}px` }}
+      >
+        {children}
+      </div>
+    </div>
   );
 };
 

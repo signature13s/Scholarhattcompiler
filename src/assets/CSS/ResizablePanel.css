@@ -5,28 +5,16 @@
 /* Resize Handle */
 .resize-handle {
   width: 0.25rem; /* w-1 */
-  background-color: #e5e7eb; /* gray-200 */
+  background-color: #374151; /* gray-700 */
   cursor: col-resize;
   transition: background-color 0.2s ease;
 }
 
-.resize-handle.dark {
-  background-color: #374151; /* gray-700 */
-}
-
 .resize-handle:hover {
-  background-color: #3b82f6; /* blue-500 */
-}
-
-.resize-handle.dark:hover {
   background-color: #60a5fa; /* blue-400 */
 }
 
 .resize-handle.resizing {
-  background-color: #3b82f6;
-}
-
-.resize-handle.resizing.dark {
   background-color: #60a5fa;
 }
 
@@ -41,13 +29,9 @@
 .resize-bar {
   width: 0.125rem; /* w-0.5 */
   height: 2rem; /* h-8 */
-  background-color: #9ca3af; /* gray-400 */
+  background-color: #6b7280; /* gray-500 */
   border-radius: 9999px;
   opacity: 0.5;
-}
-
-.resize-bar.dark {
-  background-color: #6b7280; /* gray-500 */
 }
 
 /* Panel Content */
