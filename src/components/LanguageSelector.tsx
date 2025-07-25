@@ -5,7 +5,6 @@ import {
   ChevronLeftCircleIcon,
   ChevronRightCircleIcon,
 } from "lucide-react";
-import "../assets/CSS/LanguageSelector.css";
 
 interface Language {
   id: string;
@@ -117,37 +116,54 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   };
 
   return (
-    <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
-      <div className="sidebar-header">
-        <div className="sidebar-title">
-          <Code className="sidebar-title-icon" />
-          {!isCollapsed && <h2 className="sidebar-title-text">Languages</h2>}
+    <div
+      className={`w-40 bg-gray-900 border-r border-gray-700 flex flex-col h-full transition-all duration-300 relative ${
+        isCollapsed ? "w-[3.8rem]" : ""
+      }`}
+    >
+      <div
+        className={`py-2 px-4 border-b border-gray-700 flex justify-between items-center ${
+          isCollapsed ? "p-4" : ""
+        }`}
+      >
+        <div className="flex items-center gap-2">
+          <Code className="w-5 h-5 text-blue-400" />
+          {!isCollapsed && (
+            <h2 className="text-sm font-semibold text-white">Languages</h2>
+          )}
         </div>
       </div>
 
-      <div className="sidebar-content">
-        <div className="language-list">
+      <div className="flex-1 p-2 flex">
+        <div className="flex flex-col gap-1 w-full">
           {languages.map((language) => (
             <a
               href={`/compiler/${language.id}`}
               target="_main"
               key={language.id}
+              className="no-underline"
             >
               <button
-                className={`language-button ${
-                  selectedLanguage === language.id ? "active" : ""
+                className={`flex items-center gap-3 p-2.5 rounded-lg text-sm font-medium text-gray-300 bg-transparent hover:bg-gray-800 transition-colors duration-200 w-[95%] ${
+                  selectedLanguage === language.id
+                    ? "bg-blue-900 text-blue-100"
+                    : ""
                 }`}
               >
-                <div className={`language-icon`}>{language.icon}</div>
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                  {language.icon}
+                </div>
                 {!isCollapsed && (
-                  <span className="language-name">{language.name}</span>
+                  <span className="text-sm font-medium">{language.name}</span>
                 )}
               </button>
             </a>
           ))}
         </div>
         <button
-          className={`toggle-button  ${isCollapsed ? "collapsed" : ""}`}
+          className={`bg-transparent border-none cursor-pointer z-50 p-0 flex items-center justify-center text-gray-500 hover:text-blue-400 transition-colors duration-200 ${
+            isCollapsed ? "mb-[8.1rem]" : ""
+          }`}
           onClick={toggleSidebar}
         >
           {isCollapsed ? <ChevronRightCircleIcon /> : <ChevronLeftCircleIcon />}
@@ -155,13 +171,13 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       </div>
 
       {!isCollapsed && (
-        <div className="sidebar-footer">
-          <div className="shortcuts-info">
-            <div className="shortcut-header">
-              <Terminal className="shortcut-icon" />
+        <div className="p-4 border-t border-gray-700 bg-gray-800">
+          <div className="text-xs text-gray-400">
+            <div className="flex items-center gap-2 mb-1">
+              <Terminal className="w-3 h-3" />
               <span>Shortcuts:</span>
             </div>
-            <div className="shortcut-list">
+            <div className="pl-5 flex flex-col gap-1 opacity-75 text-xs">
               <div>Ctrl+Enter: Run code</div>
               <div>Ctrl+S: Save file</div>
               <div>Ctrl+/: Comment</div>

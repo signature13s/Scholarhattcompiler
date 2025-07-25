@@ -10,7 +10,7 @@ import {
 } from "@codesandbox/sandpack-react";
 import Editor from "@monaco-editor/react";
 import { Download, Copy, RotateCcw, Play, FileText } from "lucide-react";
-import "../assets/CSS/Playeditor.css";
+
 // --------- Custom dark theme for Monaco ----------
 const defineCustomTheme = (monaco: any) => {
   monaco.editor.defineTheme("monaco-111827-dark", {
@@ -49,11 +49,13 @@ const getLanguage = (filename: string) => {
   if (filename.endsWith(".json")) return "json";
   return "plaintext";
 };
+
 interface FileItem {
   id: string;
   name: string;
   content: string;
 }
+
 function PlayGroundCodeEditor() {
   const { sandpack } = useSandpack();
   const { code, updateCode } = useActiveCode();
@@ -82,122 +84,127 @@ function PlayGroundCodeEditor() {
   };
 
   return (
-    <SandpackStack>
-      <div
-        className="editor-container"
-        style={{
-          background: "#111827",
-          minHeight: "100vh",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* File Tabs */}
-        <div
-          className="file-tabs"
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <div className="file-list" style={{ flex: 1, display: "flex" }}>
-            <FileTabs
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-
-                borderRight: "1px solid #374151",
-                cursor: "pointer",
-                background: "#1f2937",
-                color: "#60a5fa",
-                border: "none",
-              }}
-            />
-            {/* {filesArray.map((file, index) => (
-              <div
-                key={file.id}
-                className={`file-tab ${
-                  activeFile === index ? "active-tab" : "inactive-tab"
-                }`}
-                onClick={() => {
-                  setActiveFile(index);
-                  updateCode(filesArray[index].content);
-                }}
-              >
-                <FileText className="file-icon" />
-                <span className="file-name">{file.name}</span>
-              </div>
-            ))} */}
-          </div>
-          <div
-            className="run-wrapper"
-            style={{ display: "flex", gap: 8, marginRight: 10 }}
-          >
-            <button
-              onClick={downloadCode}
-              className="action-button"
-              title="Download"
-            >
-              <Download size={18} style={{ color: "#aaa" }} />
-            </button>
-            <button onClick={copyCode} className="action-button" title="Copy">
-              <Copy size={18} style={{ color: "#aaa" }} />
-            </button>
-            <button onClick={resetCode} className="action-button" title="Reset">
-              <RotateCcw size={18} style={{ color: "#aaa" }} />
-            </button>
-            <button className="run-button">
-              <Play className="run-icon" />
-              <span>Run</span>
-            </button>
-          </div>
-        </div>
-        {/* Monaco Editor with line numbers */}
-        <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
-          <div
-            className="code-editor"
-            style={{ display: "flex", flex: 1, position: "relative" }}
-          >
-            {/* Line Numbers */}
-            <div className="line-numbers">
-              {lines.map((_, index) => (
-                <div key={index} style={{ height: 21, padding: "0 12px" }}>
-                  {index + 1}
-                </div>
-              ))}
-            </div>
-            {/* Monaco Editor */}
-            <div className="code-area" style={{ flex: 1 }}>
-              <Editor
-                height="calc(100vh - 77px)" // adjust as per your header height
-                language={getLanguage(sandpack.activeFile)}
-                key={sandpack.activeFile}
-                value={code}
-                onChange={(value) => updateCode(value ?? "")}
-                beforeMount={defineCustomTheme}
-                theme="monaco-111827-dark"
-                options={{
-                  fontSize: 14,
-                  fontFamily:
-                    'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
-                  minimap: { enabled: false },
-                  automaticLayout: true,
-                  scrollBeyondLastLine: false,
-                  lineNumbers: "off", // handled manually
-                  wordWrap: "on",
-                  tabSize: 2,
-                  padding: { top: 10 },
-                  formatOnType: true,
-                  formatOnPaste: true,
+    <>
+      {/* <style>
+        {`
+          .monaco-editor .margin,
+          .monaco-editor .glyph-margin,
+          .monaco-editor .margin-view-zones {
+            background-color: #111827 !important;
+          }
+          .monaco-editor,
+          .monaco-scrollable-element,
+          .monaco-editor-background {
+            overflow: visible !important;
+          }
+        `}
+      </style> */}
+      <SandpackStack>
+        <div className="flex-1 flex flex-col bg-gray-800 w-[60rem] min-h-screen h-full">
+          {/* File Tabs */}
+          <div className="flex items-center bg-gray-900 border-b border-gray-700">
+            <div className="flex-1 flex">
+              <FileTabs
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  borderRight: "0.1rem",
+                  borderColor: "#364153",
+                  cursor: "pointer",
+                  background: "#1f2937",
+                  color: "#60a5fa",
+                  border: "none",
+                  marginTop: "0.5rem",
+                  marginBottom: "0.5rem",
                 }}
               />
+              {/* {filesArray.map((file, index) => (
+                <div
+                  key={file.id}
+                  className={`file-tab ${
+                    activeFile === index ? "active-tab" : "inactive-tab"
+                  }`}
+                  onClick={() => {
+                    setActiveFile(index);
+                    updateCode(filesArray[index].content);
+                  }}
+                >
+                  <FileText className="file-icon" />
+                  <span className="file-name">{file.name}</span>
+                </div>
+              ))} */}
+            </div>
+            <div className="flex gap-2 mr-2.5">
+              <button
+                onClick={downloadCode}
+                className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"
+                title="Download"
+              >
+                <Download size={18} />
+              </button>
+              <button
+                onClick={copyCode}
+                className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"
+                title="Copy"
+              >
+                <Copy size={18} />
+              </button>
+              <button
+                onClick={resetCode}
+                className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"
+                title="Reset"
+              >
+                <RotateCcw size={18} />
+              </button>
+              <button className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition-colors duration-200">
+                <Play className="w-3 h-3" />
+                <span>Run</span>
+              </button>
+            </div>
+          </div>
+          {/* Monaco Editor with line numbers */}
+          <div className="flex flex-1 min-h-0">
+            <div className="flex flex-1 relative">
+              {/* Line Numbers */}
+              <div className="bg-gray-900 text-gray-400 font-mono text-sm p-4 border-r border-gray-700">
+                {lines.map((_, index) => (
+                  <div key={index} className="h-[21px] px-3">
+                    {index + 1}
+                  </div>
+                ))}
+              </div>
+              {/* Monaco Editor */}
+              <div className="flex-1">
+                <Editor
+                  height="calc(100vh - 77px)"
+                  language={getLanguage(sandpack.activeFile)}
+                  key={sandpack.activeFile}
+                  value={code}
+                  onChange={(value) => updateCode(value ?? "")}
+                  beforeMount={defineCustomTheme}
+                  theme="monaco-111827-dark"
+                  options={{
+                    fontSize: 14,
+                    fontFamily:
+                      'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
+                    minimap: { enabled: false },
+                    automaticLayout: true,
+                    scrollBeyondLastLine: false,
+                    lineNumbers: "off",
+                    wordWrap: "on",
+                    tabSize: 2,
+                    padding: { top: 10 },
+                    formatOnType: true,
+                    formatOnPaste: true,
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </SandpackStack>
+      </SandpackStack>
+    </>
   );
 }
 

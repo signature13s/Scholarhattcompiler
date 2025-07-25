@@ -8,10 +8,9 @@ import {
   Copy,
   RotateCcw,
 } from "lucide-react";
-import "../assets/CSS/Editor.css";
 import Editor from "@monaco-editor/react";
-
 import { SAMPLE_CODE } from "../helpers/constant";
+
 interface CodeEditorProps {
   language: string;
   onRun: () => void;
@@ -23,7 +22,7 @@ interface CodeEditorProps {
   editorstate: {
     user: string;
     file: string;
-    language: string; //csharp, java, python, javascript, typescript
+    language: string;
     code: string | undefined;
     input: [];
     downloadFile: string;
@@ -59,6 +58,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     currentState.code = code;
     seteditorstate(currentState);
   }
+
   useEffect(() => {
     runcode();
     setCode(files[activeFile].content);
@@ -116,8 +116,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         "editorCursor.foreground": "#FFFFFF",
         "editor.selectionBackground": "#264F78",
         "editor.inactiveSelectionBackground": "#3A3D41",
-
-        // 🔧 Fix white gutter (glyph margin)
         "editorGutter.background": "#111827",
         "editorGutter.modifiedBackground": "#1B1F23",
         "editorGutter.addedBackground": "#1B1F23",
@@ -131,126 +129,153 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   return (
-    <div className="editor-container">
-      {/* File Tabs */}
-      <div className="file-tabs">
-        <div className="file-list">
-          {files.map((file, index) => (
-            <div
-              key={file.id}
-              className={`file-tab ${
-                activeFile === index ? "active-tab" : "inactive-tab"
-              }`}
-              onClick={() => setActiveFile(index)}
+    <>
+      <style>
+        {`
+          .monaco-editor .margin,
+          .monaco-editor .glyph-margin,
+          .monaco-editor .margin-view-zones {
+            background-color: #111827 !important;
+          }
+          .monaco-editor,
+          .monaco-scrollable-element,
+          .monaco-editor-background {
+            overflow: visible !important;
+          }
+        `}
+      </style>
+      <div className="flex-1 flex flex-col bg-gray-800">
+        {/* File Tabs */}
+        <div className="flex items-center bg-gray-900 border-b border-gray-700">
+          <div className="flex-1 flex items-center overflow-x-auto">
+            {files.map((file, index) => (
+              <div
+                key={file.id}
+                className={`flex items-center gap-2 px-4 py-2 border-r border-gray-700 cursor-pointer ${
+                  activeFile === index
+                    ? "bg-gray-800 text-blue-400"
+                    : "text-gray-400 hover:bg-gray-800"
+                }`}
+                onClick={() => setActiveFile(index)}
+              >
+                <FileText className="w-4 h-4" />
+                <span className="text-sm font-medium">{file.name}</span>
+                {files.length > 1 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      closeFile(index);
+                    }}
+                    className="p-1 rounded hover:bg-gray-300"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              onClick={addNewFile}
+              className="p-2 text-blue-400 bg-gray-900 hover:text-gray-200 hover:bg-gray-800"
             >
-              <FileText className="file-icon" />
-              <span className="file-name">{file.name}</span>
-              {files.length > 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    closeFile(index);
-                  }}
-                  className="close-button"
-                >
-                  <X className="close-icon" />
-                </button>
-              )}
-            </div>
-          ))}
-          <button onClick={addNewFile} className="add-button">
-            <Plus className="add-icon" />
-          </button>
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2 px-4 py-2 border-l border-gray-700">
+            <button
+              onClick={onDownload}
+              className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"
+              title="Download"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onCopy}
+              className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"
+              title="Copy"
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onReset}
+              className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"
+              title="Reset"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onRun}
+              className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition-colors duration-200"
+              disabled={output ? (output.status ? false : true) : false}
+            >
+              <Play className="w-3 h-3" />
+              <span>Run</span>
+            </button>
+          </div>
         </div>
 
-        <div className="run-wrapper">
-          <button
-            onClick={onDownload}
-            className="action-button"
-            title="Download"
-          >
-            <Download className="icon" />
-          </button>
-          <button onClick={onCopy} className="action-button" title="Copy">
-            <Copy className="icon" />
-          </button>
-          <button onClick={onReset} className="action-button" title="Reset">
-            <RotateCcw className="icon" />
-          </button>
-          <button
-            onClick={onRun}
-            className="run-button"
-            disabled={output ? (output.status ? false : true) : false}
-          >
-            <Play className="run-icon" />
-            <span>Run</span>
-          </button>
+        {/* Code Editor */}
+        <div className="flex flex-1">
+          {/* Line Numbers */}
+          <div className="bg-gray-900 text-gray-400 font-mono text-sm p-4 border-r border-gray-700">
+            {lines?.map((_, index) => (
+              <div key={index} className="text-right pr-2 leading-6">
+                {index + 1}
+              </div>
+            ))}
+          </div>
+          {/* Code Area */}
+          <div className="flex-1 relative">
+            <Editor
+              height="calc(100vh - 140px)"
+              language={language}
+              value={code}
+              onChange={(values) => handleCodeChange(values)}
+              beforeMount={handleEditorWillMount}
+              onMount={handleEditorDidMount}
+              theme="monaco-111827-dark"
+              options={{
+                fontSize: 14,
+                fontFamily:
+                  'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
+                minimap: { enabled: false },
+                lineNumbers: "off",
+                tabSize: 4,
+                automaticLayout: true,
+                scrollBeyondLastLine: false,
+                wordWrap: "on",
+                padding: { top: 10 },
+              }}
+            />
+            {/* <textarea
+              value={code}
+              onChange={(e) => handleCodeChange(e.target.value)}
+              className="code-textarea"
+              placeholder="Write your code here..."
+              spellCheck={false}
+              style={{
+                fontFamily:
+                  'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
+                tabSize: 4,
+              }}
+            /> */}
+          </div>
         </div>
+
+        {/* Status Bar */}
+        {/* <div className="flex justify-between items-center bg-gray-900 border-t border-gray-700 px-4 py-2 text-xs text-gray-400">
+          <div className="flex gap-4 items-center">
+            <span>Line {cursorPosition.line}, Column {cursorPosition.column}</span>
+            <span>UTF-8</span>
+            <span>{language.toUpperCase()}</span>
+          </div>
+          <div className="flex gap-4 items-center">
+            <span>Spaces: 4</span>
+            <span>Lines: {lines.length}</span>
+          </div>
+        </div> */}
       </div>
-
-      {/* Code Editor */}
-      <div className="code-editor">
-        {/* Line Numbers */}
-        <div className="line-numbers">
-          {lines?.map((_, index) => (
-            <div key={index} className="line-number">
-              {index + 1}
-            </div>
-          ))}
-        </div>
-        {/* Code Area */}
-        <div className="code-area">
-          <Editor
-            height="calc(100vh - 140px)" // or "400px", or whatever fits your layout
-            language={language} // or "python", "typescript", etc.
-            value={code}
-            onChange={(values) => handleCodeChange(values)}
-            beforeMount={handleEditorWillMount}
-            onMount={handleEditorDidMount}
-            theme="monaco-111827-dark"
-            options={{
-              fontSize: 14,
-              fontFamily:
-                'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
-              minimap: { enabled: false },
-              lineNumbers: "off",
-              tabSize: 4,
-              automaticLayout: true,
-              scrollBeyondLastLine: false,
-              wordWrap: "on",
-              padding: { top: 10 },
-            }}
-          />
-          {/* <textarea
-            value={code}
-            onChange={(e) => handleCodeChange(e.target.value)}
-            className="code-textarea"
-            placeholder="Write your code here..."
-            spellCheck={false}
-            style={{
-              fontFamily:
-                'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
-              tabSize: 4,
-            }}
-          /> */}
-        </div>
-      </div>
-
-      {/* Status Bar */}
-      {/* <div className="status-bar">
-        <div className="status-left">
-          <span>
-            Line {cursorPosition.line}, Column {cursorPosition.column}
-          </span>
-          <span>UTF-8</span>
-          <span>{language.toUpperCase()}</span>
-        </div>
-        <div className="status-right">
-          <span>Spaces: 4</span>
-          <span>Lines: {lines.length}</span>
-        </div>
-      </div> */}
-    </div>
+    </>
   );
 };
 

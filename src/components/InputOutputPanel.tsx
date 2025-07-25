@@ -4,10 +4,9 @@ import {
   FileInput,
   ChevronDown,
   ChevronUp,
-  Play,
   Trash2,
 } from "lucide-react";
-import "../assets/CSS/InputOutput.css";
+
 interface InputOutputPanelProps {
   Output: any;
   onInputChange: (input: string) => void;
@@ -17,7 +16,6 @@ interface InputOutputPanelProps {
 const InputOutputPanel: React.FC<InputOutputPanelProps> = ({
   Output,
   onInputChange,
-  onRun,
 }) => {
   const [input, setInput] = useState("");
   const [isInputExpanded, setIsInputExpanded] = useState(true);
@@ -39,33 +37,31 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({
     output: string[];
   }) => {
     const { status, output } = result;
-
-    // Format header
     const headerLines = [""];
     const outputLines = Array.isArray(output) ? output : [];
     const allLines = [...headerLines, ...outputLines];
     return allLines.map((line, index) => {
       if (status == "Error" || status == "error") {
         return (
-          <div key={index} className="log-error">
+          <div key={index} className="text-white p-1 rounded-md">
             {line}
           </div>
         );
       } else if (status == "Warning" || status == "warning") {
         return (
-          <div key={index} className="log-warning">
+          <div key={index} className="text-white p-1 rounded-md">
             {line}
           </div>
         );
       } else if (status == "Success" || status == "success") {
         return (
-          <div key={index} className="log-success">
+          <div key={index} className="text-white p-1 rounded-md">
             {line}
           </div>
         );
       }
       return (
-        <div key={index} className="log-default">
+        <div key={index} className="text-gray-300">
           {line}
         </div>
       );
@@ -73,100 +69,93 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({
   };
 
   return (
-    <div className="io-wrapper">
+    <div className="flex flex-col  h-full">
       {/* Input Section */}
-      <div className="input-section">
+      <div className="border-b border-gray-700 w-full">
         <div
-          className="input-header"
+          className="flex justify-between items-center py-[0.5rem] px-4 cursor-pointer hover:bg-gray-800"
           onClick={() => setIsInputExpanded(!isInputExpanded)}
         >
-          <div className="input-title">
-            <FileInput className="input-icon" />
-            <h3 className="input-heading">Input</h3>
+          <div className="flex items-center gap-2">
+            <FileInput className="w-5 h-5 text-blue-400" />
+            <h3 className="text-base font-semibold text-white">Input</h3>
           </div>
           {isInputExpanded ? (
-            <ChevronUp className="chevron-icon" />
+            <ChevronUp className="w-5 h-5 text-gray-500" />
           ) : (
-            <ChevronDown className="chevron-icon" />
+            <ChevronDown className="w-5 h-5 text-gray-500" />
           )}
         </div>
 
         {isInputExpanded && (
-          <div className="input-body">
+          <div className="py-2 px-2">
             <textarea
               value={input}
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Enter input for your program..."
-              className="input-textarea"
+              className="w-[92%] h-12 p-4 text-sm bg-gray-800 border border-gray-700 rounded-lg resize-none outline-none text-gray-200 font-mono focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
               style={{
                 fontFamily:
                   'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
               }}
             />
-            {/* <div className="input-footer">
-              <span className="input-count">{input.length} characters</span>
-              <button onClick={onRun} className="run-buttonio">
-                <Play className="icon-sm" />
-                <span>Run</span>
-              </button>
-            </div> */}
           </div>
         )}
       </div>
 
       {/* Output Section */}
-      <div className="output-section">
+      <div className="flex-1 flex flex-col">
         <div
-          className="output-header"
+          className="flex justify-between items-center py-0.5 px-4 cursor-pointer hover:bg-gray-800 border-b border-gray-700"
           onClick={() => setIsOutputExpanded(!isOutputExpanded)}
         >
-          <div className="output-title">
-            <Terminal className="output-icon" />
-            <h3 className="output-heading">Output</h3>
+          <div className="flex items-center gap-2">
+            <Terminal className="w-5 h-5 text-green-400" />
+            <h3 className="text-base font-semibold text-white">Output</h3>
           </div>
           {Output ? (
             Output.status ? (
               Output.status == "Success" ? (
-                <p className="executing-code">Compiled </p>
+                <p className="text-white">Compiled</p>
               ) : Output.status == "Error" ? (
-                <p className="executing-code">Error</p>
+                <p className="text-white">Error</p>
               ) : (
-                <p className="executing-code">Pending</p>
+                <p className="text-white">Pending</p>
               )
             ) : (
-              <p className="executing-code">Executing code ...</p>
+              <p className="text-white">Executing code ...</p>
             )
           ) : (
             <></>
           )}
-          <div className="output-controls">
+          <div className="flex items-center gap-2">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 clearOutput();
               }}
-              className="clear-button"
+              className="p-1.5 rounded bg-gray-900 hover:bg-gray-700"
               title="Clear output"
             >
-              <Trash2 className="icon-sm-clear" />
+              <Trash2 className="w-5 h-5 text-red-400" />
             </button>
             {isOutputExpanded ? (
-              <ChevronUp className="chevron-icon" />
+              <ChevronUp className="w-5 h-5 text-gray-500" />
             ) : (
-              <ChevronDown className="chevron-icon" />
+              <ChevronDown className="w-5 h-5 text-gray-500" />
             )}
           </div>
         </div>
 
         {isOutputExpanded && (
-          <div className="output-body">
-            <div className="output-box">
+          <div className="flex-1">
+            <div className="w-[92%] h-[23rem] bg-black rounded-lg p-4 font-mono text-sm min-h-full">
               {Output ? (
-                <div className="output-content">
+                <div className="[&>*+*]:mt-1">
                   {formatTerminalOutput(Output)}
                 </div>
               ) : (
-                <div className="output-placeholder">
+                <div className="italic text-gray-400">
                   Click "Run" to see output...
                 </div>
               )}
@@ -176,16 +165,16 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({
       </div>
 
       {/* Console Info */}
-      <div className="console-info">
-        <div className="console-meta">
-          <div className="console-status">
+      <div className="mt-8 p-4 bg-gray-800 border-gray-700">
+        <div className="text-sm text-gray-400">
+          <div className="flex justify-between">
             <span>Console</span>
-            <span className="status-ready">Ready</span>
+            <span className="text-green-500 font-medium">Ready</span>
           </div>
-          <div className="console-time">
+          <div className="text-xs opacity-75">
             Execution time: {Output ? Output?.timeTaken + " Seconds" : ""}
           </div>
-          <div className="console-time">
+          <div className="text-xs opacity-75">
             Memory Used: {Output ? Output?.memoryUsed + " KB" : " "}
           </div>
         </div>

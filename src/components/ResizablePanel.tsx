@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../assets/CSS/ResizablePanel.css";
+
 interface ResizablePanelProps {
   children: React.ReactNode;
   minWidth?: number;
@@ -62,22 +62,24 @@ const ResizablePanel: React.FC<ResizablePanelProps> = ({
   }, [isResizing, minWidth, maxWidth]);
 
   return (
-    <div className="resizable-wrapper">
+    <div className="flex">
       {/* Resize Handle */}
       <div
-        className={`resize-handle ${isResizing ? "resizing" : ""}`}
+        className={`w-1 bg-gray-700 cursor-col-resize transition-colors duration-200 hover:bg-blue-400 ${
+          isResizing ? "bg-blue-400" : ""
+        }`}
         onMouseDown={handleMouseDown}
         style={{ minHeight: "100%" }}
       >
-        <div className="resize-handle-inner">
-          <div className="resize-bar"></div>
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="w-0.5 h-8 bg-gray-500 rounded-full opacity-50"></div>
         </div>
       </div>
 
       {/* Panel Content */}
       <div
         ref={panelRef}
-        className="resizable-panel"
+        className={`resizable-panel ${className}`}
         style={{ width: `${width}px` }}
       >
         {children}
