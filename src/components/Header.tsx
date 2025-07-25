@@ -1,7 +1,23 @@
-import { GraduationCap, FileText, TestTube } from "lucide-react";
+import {
+  CircleFadingArrowUp,
+  Trophy,
+  BookText,
+  Presentation,
+} from "lucide-react";
 import "../assets/CSS/Header.css";
 import logo from "../assets/images/logo.png";
-const Header = () => {
+interface Headerprops {
+  course: string;
+  books: string;
+  skillTest: string;
+  masterClass: string;
+}
+const Header: React.FC<Headerprops> = ({
+  course,
+  books,
+  skillTest,
+  masterClass,
+}) => {
   return (
     <header className="header">
       <div className="header-container">
@@ -12,29 +28,30 @@ const Header = () => {
             <a
               href="/compiler"
               title="ScholarHat Coding Playground"
+              className=" h-10 w-10"
               style={{ textDecoration: "none", color: "#fff" }}
             >
-              <img src={logo} height="40px" alt="logo" />
+              <img src={logo} alt="logo" />
             </a>
             <span className="brand-name">ScholarHat</span>
           </div>
 
           {/* Navigation Links */}
           <nav className="nav-links">
-            <a href="#" className="nav-link">
-              <GraduationCap className="nav-icon" />
+            <a href={course} className="nav-link">
+              <CircleFadingArrowUp className="nav-icon play-icon" />
               <span>Free Courses</span>
             </a>
-            <a href="#" className="nav-link">
-              <FileText className="nav-icon" />
+            <a href={books} className="nav-link">
+              <BookText className="nav-icon" />
               <span>Free Interview EBooks</span>
             </a>
-            <a href="#" className="nav-link">
-              <TestTube className="nav-icon" />
+            <a href={skillTest} className="nav-link">
+              <Trophy className="nav-icon" />
               <span>Free skill Tests</span>
             </a>
-            <a href="#" className="nav-link">
-              <TestTube className="nav-icon" />
+            <a href={masterClass} className="nav-link">
+              <Presentation className="nav-icon" />
               <span>Free Masterclass</span>
             </a>
           </nav>

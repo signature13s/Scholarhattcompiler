@@ -41,7 +41,7 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({
     const { status, output } = result;
 
     // Format header
-    const headerLines = [`Execution code ...`];
+    const headerLines = [""];
     const outputLines = Array.isArray(output) ? output : [];
     const allLines = [...headerLines, ...outputLines];
     return allLines.map((line, index) => {
@@ -103,13 +103,13 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({
                   'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
               }}
             />
-            <div className="input-footer">
+            {/* <div className="input-footer">
               <span className="input-count">{input.length} characters</span>
               <button onClick={onRun} className="run-buttonio">
                 <Play className="icon-sm" />
                 <span>Run</span>
               </button>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
@@ -124,6 +124,21 @@ const InputOutputPanel: React.FC<InputOutputPanelProps> = ({
             <Terminal className="output-icon" />
             <h3 className="output-heading">Output</h3>
           </div>
+          {Output ? (
+            Output.status ? (
+              Output.status == "Success" ? (
+                <p className="executing-code">Compiled </p>
+              ) : Output.status == "Error" ? (
+                <p className="executing-code">Error</p>
+              ) : (
+                <p className="executing-code">Pending</p>
+              )
+            ) : (
+              <p className="executing-code">Executing code ...</p>
+            )
+          ) : (
+            <></>
+          )}
           <div className="output-controls">
             <button
               onClick={(e) => {

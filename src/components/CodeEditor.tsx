@@ -18,8 +18,6 @@ interface CodeEditorProps {
   onDownload: () => void;
   onCopy: () => void;
   onReset: () => void;
-  data: string;
-  setData: any;
   user: string;
   seteditorstate: any;
   editorstate: {
@@ -30,6 +28,7 @@ interface CodeEditorProps {
     input: [];
     downloadFile: string;
   };
+  output: any;
 }
 
 interface FileTab {
@@ -45,7 +44,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   onDownload,
   onCopy,
   onReset,
-
+  output,
   editorstate,
   seteditorstate,
 }) => {
@@ -54,7 +53,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     SAMPLE_CODE.filter((snippet) => snippet.language == language)
   );
   const [code, setCode] = useState(files[0].content);
-  const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
 
   function runcode() {
     const currentState = editorstate;
@@ -179,7 +177,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           <button onClick={onReset} className="action-button" title="Reset">
             <RotateCcw className="icon" />
           </button>
-          <button onClick={onRun} className="run-button">
+          <button
+            onClick={onRun}
+            className="run-button"
+            disabled={output ? (output.status ? false : true) : false}
+          >
             <Play className="run-icon" />
             <span>Run</span>
           </button>
@@ -190,7 +192,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       <div className="code-editor">
         {/* Line Numbers */}
         <div className="line-numbers">
-          {lines.map((_, index) => (
+          {lines?.map((_, index) => (
             <div key={index} className="line-number">
               {index + 1}
             </div>

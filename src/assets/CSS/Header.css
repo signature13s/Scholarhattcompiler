@@ -120,3 +120,6 @@
 .cta-button:hover {
   background-color: #1d4ed8;
 }
+.play-icon {
+  rotate: 90deg;
+}

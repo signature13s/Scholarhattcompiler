@@ -15,7 +15,13 @@ import {
 } from "./helpers/constant.ts";
 import UtilService from "./helpers/util.ts";
 import EditorService from "./services/editor.service.ts";
-
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import PlayGroundCodeEditor from "./components/PlayGroundCodeEditor.tsx";
+import {
+  SandpackLayout,
+  SandpackPreview,
+  SandpackProvider,
+} from "@codesandbox/sandpack-react";
 function generateId() {
   const timestamp = new Date().getTime();
   // Generate a random number with 6 digits
@@ -34,7 +40,7 @@ function getSandBoxId() {
   return id;
 }
 
-function getSandBoxCode(codeId: string) {
+function getSandBoxCode(codeId: any) {
   let sandboxcodeId = sessionStorage.getItem(SANDBOX_CODE_ID);
   let code = localStorage.getItem(codeId) || "";
   //create new:check sandboxId is null and codeId present then setSession and remove localStorage
@@ -68,7 +74,7 @@ const AppContent: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [data, setData] = useState(" ");
   const sandboxId = getSandBoxId();
-  const code = getSandBoxCode(params.id);
+  const code = getSandBoxCode(params?.id);
 
   const [editorState, setEditorState] = useState({
     user: sandboxId,
@@ -92,75 +98,98 @@ const AppContent: React.FC = () => {
   //       });
   //   }
   // }
-  // function getCourse(category: any) {
-  //   switch (category) {
-  //     case "c":
-  //       return "/free-course/c-course-for-beginners";
-  //     case "cpp":
-  //       return "/free-course/cpp-course-for-beginners";
-  //     case "csharp":
-  //       return "/free-course/csharp-course-for-beginners";
-  //     case "html":
-  //       return "/free-course/html-course";
-  //     case "javascript":
-  //       return "/free-course/java-course";
-  //     case "typescript":
-  //       return "/free-course/typescript-course";
-  //     case "java":
-  //       return "/free-course/java-course";
-  //     case "python":
-  //       return "/free-course/python-course-for-beginners";
-  //     case "kotlin":
-  //       return "";
-  //   }
-  // }
+  function getCourse(category: any) {
+    switch (category) {
+      case "c":
+        return "/free-course/c-course-for-beginners";
+      case "cpp":
+        return "/free-course/cpp-course-for-beginners";
+      case "csharp":
+        return "/free-course/csharp-course-for-beginners";
+      case "html":
+        return "/free-course/html-course";
+      case "javascript":
+        return "/free-course/java-course";
+      case "typescript":
+        return "/free-course/typescript-course";
+      case "java":
+        return "/free-course/java-course";
+      case "python":
+        return "/free-course/python-course-for-beginners";
+      case "kotlin":
+        return "";
+    }
+  }
 
-  // function getSkillTest(category: any) {
-  //   switch (category) {
-  //     case "c":
-  //       return "/skill-challenge";
-  //     case "cpp":
-  //       return "/skill-challenge";
-  //     case "csharp":
-  //       return "/skill-challenge/csharp";
-  //     case "html":
-  //       return "/skill-challenge/html";
-  //     case "javascript":
-  //       return "/skill-challenge/javascript";
-  //     case "typescript":
-  //       return "/skill-challenge/typescript";
-  //     case "java":
-  //       return "/skill-challenge";
-  //     case "kotlin":
-  //       return "/skill-challenge";
+  function getSkillTest(category: any) {
+    switch (category) {
+      case "c":
+        return "/skill-challenge";
+      case "cpp":
+        return "/skill-challenge";
+      case "csharp":
+        return "/skill-challenge/csharp";
+      case "html":
+        return "/skill-challenge/html";
+      case "javascript":
+        return "/skill-challenge/javascript";
+      case "typescript":
+        return "/skill-challenge/typescript";
+      case "java":
+        return "/skill-challenge";
+      case "kotlin":
+        return "/skill-challenge";
 
-  //     case "python":
-  //       return "/skill-challenge";
-  //   }
-  // }
-  // function getTutorial(category: any) {
-  //   switch (category) {
-  //     case "c":
-  //       return "/tutorial/c";
-  //     case "cpp":
-  //       return "/tutorial/cpp";
-  //     case "csharp":
-  //       return "/tutorial/csharp";
-  //     case "html":
-  //       return "/tutorial/html";
-  //     case "javascript":
-  //       return "/tutorial/javascript";
-  //     case "typescript":
-  //       return "/tutorial/typescript";
-  //     case "java":
-  //       return "/tutorial/java";
-  //     case "kotlin":
-  //       return "/tutorial/kotlin";
-  //     case "python":
-  //       return "/tutorial/python";
-  //   }
-  // }
-
+      case "python":
+        return "/skill-challenge";
+    }
+  }
+  function getTutorial(category: any) {
+    switch (category) {
+      case "c":
+        return "/tutorial/c";
+      case "cpp":
+        return "/tutorial/cpp";
+      case "csharp":
+        return "/tutorial/csharp";
+      case "html":
+        return "/tutorial/html";
+      case "javascript":
+        return "/tutorial/javascript";
+      case "typescript":
+        return "/tutorial/typescript";
+      case "java":
+        return "/tutorial/java";
+      case "kotlin":
+        return "/tutorial/kotlin";
+      case "python":
+        return "/tutorial/python";
+    }
+  }
+  function getBooks(category: any) {
+    switch (category) {
+      case "c":
+        return "/books/c-interview-questions-and-answers-book-pdf";
+      case "cpp":
+        return "/books/cpp-interview-questions-and-answers-book-pdf";
+      case "csharp":
+        return "/books/csharp-interview-questions-and-answers-book-pdf";
+      case "html":
+        return "/books/html-interview-questions-and-answers-book-pdf";
+      case "javascript":
+        return "/books/javascript-interview-questions-and-answers-book-pdf";
+      case "typescript":
+        return "/books/typescript-interview-questions-and-answers-book-pdf";
+      case "java":
+        return "/books/java-interview-questions-and-answers-book-pdf";
+      case "python":
+        return "/books/python-interview-questions-and-answers-book-pdf";
+      case "kotlin":
+        return "";
+      default:
+        return "";
+    }
+  }
   // useEffect(() => {
   //   let language = toTitleCase(params.lang);
   //   const course = getCourse(params.lang);
@@ -332,59 +361,11 @@ const AppContent: React.FC = () => {
               setOutput(err);
             });
           break;
-        case "html":
-          //iframe
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("frameborder", "0");
-          iframe.setAttribute("id", "iframeResult");
-          iframe.setAttribute("name", "iframeResult");
-          iframe.setAttribute("allowfullscreen", "true");
-          iframe.setAttribute("class", "html-sandbox");
-
-          //iframe wrapper
-          document.getElementById("iframewrapper").innerHTML = "";
-          document.getElementById("iframewrapper").appendChild(iframe);
-
-          var iframeWrapper = iframe.contentWindow
-            ? iframe.contentWindow
-            : iframe.contentDocument.document
-            ? iframe.contentDocument.document
-            : iframe.contentDocument;
-          iframeWrapper.document.open();
-          iframeWrapper.document.write(code);
-          iframeWrapper.document.close();
-
-          //Bug Fixed: contentEditable is set to true, to fix text-selection (bug) in firefox.
-          if (
-            iframeWrapper.document.body &&
-            !iframeWrapper.document.body.isContentEditable
-          ) {
-            iframeWrapper.document.body.contentEditable = true;
-            iframeWrapper.document.body.contentEditable = false;
-          }
-          //enable run button
-
-          break;
         default:
           break;
       }
     }
   };
-  //   const runCode = () => {
-  //     setOutput("Compiling...\n");
-
-  //     // Simulate compilation and execution
-  //     setTimeout(() => {
-  //       const sampleOutput = `Hello, World!
-  // The answer is: 42
-  // Sum of 1-10: 55
-
-  // Success: Program executed successfully
-  // Execution time: 0.245s
-  // Memory usage: 15.2 MB`;
-  //       setOutput(sampleOutput);
-  //     }, 1000);
-  //   };
 
   const downloadCode = () => {
     // Simulate download functionality
@@ -416,7 +397,12 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="main-layout">
-      <Header />
+      <Header
+        course={getCourse(params.lang) || "#"}
+        books={getBooks(params.lang)}
+        skillTest={getSkillTest(params.lang) || "#"}
+        masterClass={getTutorial(params.lang) || "#"}
+      />
       <div className="main-content">
         {/* Mobile: Overlay menu */}
         <div
@@ -443,47 +429,132 @@ const AppContent: React.FC = () => {
             onLanguageChange={setSelectedLanguage}
           />
         </div>
-
-        <div className="codeeditor-container">
-          <div className="code-editor-wrapper">
-            <CodeEditor
-              editorstate={editorState}
-              seteditorstate={setEditorState}
-              data={data}
-              setData={setData}
-              user={SANDBOX_ID}
-              language={selectedLanguage}
-              onRun={runCode}
-              onDownload={downloadCode}
-              onCopy={copyCode}
-              onReset={resetCode}
-            />
-          </div>
-
-          <div className="resizable-panel-desktop">
-            <ResizablePanel
-              minWidth={300}
-              maxWidth={800}
-              defaultWidth={480}
-              className="resizable-content"
+        {params.lang == "html" ||
+        params.lang == "react" ||
+        params.lang == "angular" ? (
+          <SandpackProvider
+            template={params?.lang === "html" ? "static" : params.lang}
+            theme={{
+              colors: {
+                surface1: "#111827", // editor background & gutter
+                surface2: "#3A3D41", // inactive selection background
+                surface3: "#264F78", // selection background
+                clickable: "#9CDCFE", // active line number
+                base: "#D4D4D4", // default text/foreground
+                disabled: "#5B6B80", // regular line number/gutter marks
+                hover: "#264F78", // matches selection background/hover
+                accent: "#60a5fa", // keyword, also used for function highlight
+                error: "#FFFFFF", // cursor foreground (no explicit error, so using white as bright/error)
+                errorSurface: "#B5CEA8", // number highlight, used as an 'error' background here
+              },
+              syntax: {
+                plain: "#D4D4D4", // general text/foreground
+                comment: {
+                  color: "#6A9955",
+                  fontStyle: "italic",
+                },
+                keyword: "#C586C0",
+                tag: "#D4D4D4",
+                punctuation: "#D4D4D4",
+                definition: "#4EC9B0", // type.identifier
+                property: "#9CDCFE", // variable
+                static: "#DCDCAA", // function
+                string: "#CE9178",
+              },
+              font: {
+                body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                mono: 'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
+                size: "16px",
+                lineHeight: "20px",
+              },
+            }}
+          >
+            <SandpackLayout
+              style={{
+                background: "#111827",
+                margin: 0,
+                display: "flex",
+                height: "100vh",
+                overflow: "hidden",
+                border: "none",
+              }}
             >
-              <InputOutputPanel
-                Output={output}
-                onInputChange={setInput}
-                onRun={runCode}
-              />
-            </ResizablePanel>
-          </div>
-        </div>
-      </div>
+              {/* Code Editor Panel */}
+              <div
+                className="code-editor-wrapper"
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <PlayGroundCodeEditor />
+              </div>
 
-      {/* Mobile: I/O bottom panel */}
-      <div className="io-mobile">
-        <InputOutputPanel
-          Output={output}
-          onInputChange={setInput}
-          onRun={runCode}
-        />
+              {/* Resizable Preview Panel */}
+              <ResizablePanel
+                minWidth={300}
+                maxWidth={800}
+                defaultWidth={480}
+                className="resizable-content"
+                style={{ height: "100%", boxSizing: "border-box" }}
+              >
+                <SandpackPreview
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderLeft: "1px solid #202939",
+                    background: "#fff",
+                  }}
+                  showOpenInCodeSandbox={false}
+                  showRestartButton={false}
+                />
+              </ResizablePanel>
+            </SandpackLayout>
+          </SandpackProvider>
+        ) : (
+          <div className="codeeditor-container">
+            <div className="code-editor-wrapper">
+              <CodeEditor
+                editorstate={editorState}
+                seteditorstate={setEditorState}
+                data={data}
+                setData={setData}
+                user={SANDBOX_ID}
+                language={selectedLanguage}
+                onRun={runCode}
+                onDownload={downloadCode}
+                onCopy={copyCode}
+                onReset={resetCode}
+                output={output}
+              />
+            </div>
+
+            <div className="resizable-panel-desktop">
+              <ResizablePanel
+                minWidth={300}
+                maxWidth={800}
+                defaultWidth={480}
+                className="resizable-content"
+              >
+                <InputOutputPanel
+                  Output={output}
+                  onInputChange={setInput}
+                  onRun={runCode}
+                />
+              </ResizablePanel>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile: I/O bottom panel */}
+        <div className="io-mobile">
+          <InputOutputPanel
+            Output={output}
+            onInputChange={setInput}
+            onRun={runCode}
+          />
+        </div>
       </div>
 
       <MobileToolbar
