@@ -144,7 +144,9 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               className="no-underline"
             >
               <button
-                className={`flex items-center gap-3 p-2.5 rounded-lg text-sm font-medium text-gray-300 bg-transparent hover:bg-gray-800 transition-colors duration-200 w-[95%] ${
+                className={`flex ${
+                  isCollapsed ? "justify-center" : "justify-normal"
+                } items-center gap-3 p-2.5 rounded-lg text-sm font-medium text-gray-300  hover:bg-gray-800 transition-colors duration-200 w-[95%] ${
                   selectedLanguage === language.id
                     ? "bg-blue-900 text-blue-100"
                     : ""

@@ -21,7 +21,8 @@ import {
   SandpackPreview,
   SandpackProvider,
 } from "@codesandbox/sandpack-react";
-
+import { SandpackFileExplorer } from "sandpack-file-explorer";
+import { ChevronLeftCircleIcon, ChevronRightCircleIcon } from "lucide-react";
 function generateId() {
   const timestamp = new Date().getTime();
   const random = Math.floor(Math.random() * 1000000);
@@ -67,7 +68,7 @@ const AppContent: React.FC = () => {
   const [data, setData] = useState(" ");
   const sandboxId = getSandBoxId();
   const code = getSandBoxCode(params?.id);
-
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [editorState, setEditorState] = useState({
     user: sandboxId,
     file: SANDBOX_ID,
@@ -78,7 +79,9 @@ const AppContent: React.FC = () => {
     input: input?.length > 0 ? input.split("\n") : [],
     downloadFile: "code.txt",
   });
-
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
   function getCourse(category: any) {
     switch (category) {
       case "c":
@@ -451,35 +454,40 @@ const AppContent: React.FC = () => {
                 background: "#111827",
                 margin: 0,
                 display: "flex",
-                height: "100vh",
+                height: "90vh",
                 overflow: "hidden",
                 border: "none",
               }}
             >
               {/* Code Editor Panel */}
               <div className="flex-1 flex flex-col">
-                <PlayGroundCodeEditor />
+                <PlayGroundCodeEditor collapsed={isCollapsed} />
               </div>
 
               {/* Resizable Preview Panel */}
-              <ResizablePanel
-                minWidth={300}
-                maxWidth={800}
-                defaultWidth={480}
-                className="h-full box-border bg-gray-900 border-l border-gray-700"
-                style={{ height: "100%", boxSizing: "border-box" }}
-              >
-                <SandpackPreview
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderLeft: "1px solid #202939",
-                    background: "#fff",
-                  }}
-                  showOpenInCodeSandbox={false}
-                  showRestartButton={false}
-                />
-              </ResizablePanel>
+              <div className="flex flex-row w-0 mr-[1.30rem] h-[90%] bg-gray-900">
+                <button
+                  className={`bg-transparent border-none cursor-pointer z-50 p-0 items-center justify-center text-gray-500 hover:text-blue-400 transition-colors duration-200 `}
+                  onClick={toggleSidebar}
+                >
+                  {isCollapsed ? (
+                    <ChevronRightCircleIcon />
+                  ) : (
+                    <ChevronLeftCircleIcon />
+                  )}
+                </button>
+              </div>
+              {isCollapsed ? <SandpackFileExplorer /> : <></>}
+              <SandpackPreview
+                style={{
+                  width: "29rem",
+                  height: "100%",
+                  borderLeft: "1px solid #202939",
+                  background: "#fff",
+                }}
+                showOpenInCodeSandbox={false}
+                showRestartButton={false}
+              />
             </SandpackLayout>
           </SandpackProvider>
         ) : (

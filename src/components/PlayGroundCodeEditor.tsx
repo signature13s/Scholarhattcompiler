@@ -56,7 +56,7 @@ interface FileItem {
   content: string;
 }
 
-function PlayGroundCodeEditor() {
+function PlayGroundCodeEditor({ collapsed }: any) {
   const { sandpack } = useSandpack();
   const { code, updateCode } = useActiveCode();
 
@@ -77,7 +77,7 @@ function PlayGroundCodeEditor() {
   const copyCode = () => {
     navigator.clipboard.writeText(code ?? "");
   };
-
+  console.log(sandpack);
   const resetCode = () => {
     // Reset to default contents if available, otherwise clear
     updateCode("");
@@ -100,11 +100,16 @@ function PlayGroundCodeEditor() {
         `}
       </style> */}
       <SandpackStack>
-        <div className="flex-1 flex flex-col bg-gray-800 w-[60rem] min-h-screen h-full">
+        <div
+          className={`flex-1 flex flex-col bg-gray-800 ${
+            collapsed ? "w-[50rem]" : "w-[60rem]"
+          } min-h-screen h-full`}
+        >
           {/* File Tabs */}
           <div className="flex items-center bg-gray-900 border-b border-gray-700">
             <div className="flex-1 flex">
               <FileTabs
+                closableTabs={true}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -177,9 +182,9 @@ function PlayGroundCodeEditor() {
               {/* Monaco Editor */}
               <div className="flex-1">
                 <Editor
-                  height="calc(100vh - 77px)"
+                  height="calc(100vh - 150px)"
                   language={getLanguage(sandpack.activeFile)}
-                  key={sandpack.activeFile}
+                  key={sandpack.files}
                   value={code}
                   onChange={(value) => updateCode(value ?? "")}
                   beforeMount={defineCustomTheme}
