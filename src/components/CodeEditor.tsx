@@ -51,7 +51,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [files, setFiles] = useState<FileTab[]>(
     SAMPLE_CODE.filter((snippet) => snippet.language == language)
   );
-  const [code, setCode] = useState(files[0].content);
+  const [code, setCode] = useState(editorstate.code);
 
   function runcode() {
     const currentState = editorstate;
@@ -61,13 +61,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   useEffect(() => {
     runcode();
-    setCode(files[activeFile].content);
+    setCode(editorstate.code);
   }, [activeFile, files]);
 
-  const handleCodeChange = (newCode: string) => {
+  const handleCodeChange = (newCode: any) => {
     setCode(newCode);
     const updatedFiles = [...files];
     updatedFiles[activeFile].content = newCode;
+    editorstate.code = newCode;
     setFiles(updatedFiles);
   };
 
@@ -75,8 +76,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     const newFile: FileTab = {
       id: Date.now().toString(),
       name: `file${files.length + 1}.${language}`,
-      content: SAMPLE_CODE.find((snippet) => snippet.language == language)
-        ?.content,
+      content: editorstate.code,
       language: language,
     };
     setFiles([...files, newFile]);

@@ -30,52 +30,55 @@ function generateId() {
   return uniqueNumber;
 }
 
-function getSandBoxId() {
-  let id = sessionStorage.getItem(SANDBOX_ID);
-  if (id == null) {
-    id = generateId();
-    sessionStorage.setItem(SANDBOX_ID, id);
-  }
-  return id;
-}
-
-function getSandBoxCode(codeId: any) {
-  let sandboxcodeId = sessionStorage.getItem(SANDBOX_CODE_ID);
-  let code = localStorage.getItem(codeId) || "";
-  if (sandboxcodeId == null && codeId != undefined) {
-    sessionStorage.setItem(SANDBOX_CODE_ID, codeId);
-    sessionStorage.setItem(codeId, code);
-    localStorage.removeItem(codeId);
-  } else if (code != null && codeId != undefined) {
-    sessionStorage.setItem(SANDBOX_CODE_ID, codeId);
-    sessionStorage.setItem(codeId, code);
-    localStorage.removeItem(codeId);
-  } else if (sandboxcodeId != null) {
-    let data = sessionStorage.getItem(sandboxcodeId);
-    if (data != null && data != "null") code = data;
-  }
-  return code;
-}
-
 const AppContent: React.FC = () => {
   const params = useParams();
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     params?.lang || ""
   );
+
+  function getSandBoxId() {
+    let id = sessionStorage.getItem(SANDBOX_ID);
+    if (id == null) {
+      id = generateId();
+      sessionStorage.setItem(SANDBOX_ID, id);
+    }
+    return id;
+  }
+  function getSandBoxCode(codeId: any) {
+    let sandboxcodeId = sessionStorage.getItem(SANDBOX_CODE_ID);
+    let code = localStorage.getItem(codeId) || "";
+    if (sandboxcodeId == null && codeId != undefined) {
+      sessionStorage.setItem(SANDBOX_CODE_ID, codeId);
+      sessionStorage.setItem(codeId, code);
+      localStorage.removeItem(codeId);
+    } else if (code != null && codeId != undefined) {
+      sessionStorage.setItem(SANDBOX_CODE_ID, codeId);
+      sessionStorage.setItem(codeId, code);
+      localStorage.removeItem(codeId);
+    } else if (sandboxcodeId != null) {
+      let data = sessionStorage.getItem(sandboxcodeId);
+      if (data != null && data != "null") code = data;
+    }
+    return code;
+  }
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [data, setData] = useState(" ");
   const sandboxId = getSandBoxId();
   const code = getSandBoxCode(params?.id);
+
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [editorState, setEditorState] = useState({
     user: sandboxId,
     file: SANDBOX_ID,
     language: params.lang,
     code:
-      SAMPLE_CODE.find((snippet) => snippet.language == params.lang)?.content ||
-      "",
+      params?.id?.length > 0
+        ? code
+        : SAMPLE_CODE.find((snippet) => snippet.language == params.lang)
+            ?.content,
+
     input: input?.length > 0 ? input.split("\n") : [],
     downloadFile: "code.txt",
   });
