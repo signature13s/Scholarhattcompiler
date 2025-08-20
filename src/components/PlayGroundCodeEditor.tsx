@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
 import {
-  SandpackProvider,
-  SandpackLayout,
-  SandpackPreview,
   FileTabs,
   useSandpack,
   useActiveCode,
   SandpackStack,
 } from "@codesandbox/sandpack-react";
 import Editor from "@monaco-editor/react";
-import { Download, Copy, RotateCcw, Play, FileText } from "lucide-react";
+import { Download, Copy, RotateCcw, Play } from "lucide-react";
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 // --------- Custom dark theme for Monaco ----------
 const defineCustomTheme = (monaco: any) => {
@@ -59,9 +57,12 @@ interface FileItem {
 function PlayGroundCodeEditor({ collapsed }: any) {
   const { sandpack } = useSandpack();
   const { code, updateCode } = useActiveCode();
-
+  const [initialCode, setInitialCode] = useState<string>(
+    sandpack.activeFile ? sandpack.files[sandpack.activeFile].code : ""
+  );
   const lines = code?.split("\n") || [];
-
+  const copied = () => toast("Code Copied Successfully!");
+  const Reset = () => toast("Code Reset Successful!");
   // File system actions
   const downloadCode = () => {
     console.log("clicked");
@@ -76,11 +77,13 @@ function PlayGroundCodeEditor({ collapsed }: any) {
 
   const copyCode = () => {
     navigator.clipboard.writeText(code ?? "");
+    copied();
   };
   console.log(sandpack);
   const resetCode = () => {
     // Reset to default contents if available, otherwise clear
-    updateCode("");
+    updateCode(initialCode || "");
+    Reset();
   };
 
   return (
@@ -155,6 +158,18 @@ function PlayGroundCodeEditor({ collapsed }: any) {
               >
                 <Copy size={18} />
               </button>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
               <button
                 onClick={resetCode}
                 className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"

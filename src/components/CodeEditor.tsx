@@ -10,13 +10,10 @@ import {
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import { SAMPLE_CODE } from "../helpers/constant";
-
+import { ToastContainer, toast } from "react-toastify";
 interface CodeEditorProps {
   language: string;
   onRun: () => void;
-  onDownload: () => void;
-  onCopy: () => void;
-  onReset: () => void;
   user: string;
   seteditorstate: any;
   editorstate: {
@@ -40,9 +37,6 @@ interface FileTab {
 const CodeEditor: React.FC<CodeEditorProps> = ({
   language,
   onRun,
-  onDownload,
-  onCopy,
-  onReset,
   output,
   editorstate,
   seteditorstate,
@@ -52,13 +46,37 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     SAMPLE_CODE.filter((snippet) => snippet.language == language)
   );
   const [code, setCode] = useState(editorstate.code);
-
+  const [initialCode, setInitialCode] = useState<string>(
+    editorstate.code || files[activeFile]?.content || ""
+  );
+  const copied = () => toast("Code Copied Successfully!");
+  const Reset = () => toast("Code Reset Successful!");
   function runcode() {
     const currentState = editorstate;
     currentState.code = code;
     seteditorstate(currentState);
   }
+  function onCopy() {
+    navigator.clipboard.writeText(code || "");
+    copied();
+  }
 
+  function onDownload() {
+    const blob = new Blob([code || ""], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = editorstate.downloadFile || "code.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    copied();
+  }
+
+  function onReset() {
+    setCode(initialCode || "");
+    Reset();
+  }
   useEffect(() => {
     runcode();
     setCode(editorstate.code);
@@ -196,6 +214,18 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
             >
               <Copy className="w-4 h-4" />
             </button>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
             <button
               onClick={onReset}
               className="p-2 rounded text-blue-400 hover:text-gray-200 bg-gray-900 transition-all duration-200"
@@ -247,33 +277,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
                 padding: { top: 10 },
               }}
             />
-            {/* <textarea
-              value={code}
-              onChange={(e) => handleCodeChange(e.target.value)}
-              className="code-textarea"
-              placeholder="Write your code here..."
-              spellCheck={false}
-              style={{
-                fontFamily:
-                  'JetBrains Mono, Fira Code, Monaco, Consolas, "Courier New", monospace',
-                tabSize: 4,
-              }}
-            /> */}
           </div>
         </div>
-
-        {/* Status Bar */}
-        {/* <div className="flex justify-between items-center bg-gray-900 border-t border-gray-700 px-4 py-2 text-xs text-gray-400">
-          <div className="flex gap-4 items-center">
-            <span>Line {cursorPosition.line}, Column {cursorPosition.column}</span>
-            <span>UTF-8</span>
-            <span>{language.toUpperCase()}</span>
-          </div>
-          <div className="flex gap-4 items-center">
-            <span>Spaces: 4</span>
-            <span>Lines: {lines.length}</span>
-          </div>
-        </div> */}
       </div>
     </>
   );

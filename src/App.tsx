@@ -5,7 +5,6 @@ import Header from "./components/Header.tsx";
 import LanguageSelector from "./components/LanguageSelector.tsx";
 import CodeEditor from "./components/CodeEditor.tsx";
 import InputOutputPanel from "./components/InputOutputPanel.tsx";
-import ResizablePanel from "./components/ResizablePanel.tsx";
 import MobileToolbar from "./components/MobileToolbar.tsx";
 import {
   SANDBOX_ID,
@@ -23,6 +22,8 @@ import {
 } from "@codesandbox/sandpack-react";
 import { SandpackFileExplorer } from "sandpack-file-explorer";
 import { ChevronLeftCircleIcon, ChevronRightCircleIcon } from "lucide-react";
+import { ToastContainer } from "react-toastify";
+
 function generateId() {
   const timestamp = new Date().getTime();
   const random = Math.floor(Math.random() * 1000000);
@@ -44,6 +45,7 @@ const AppContent: React.FC = () => {
     }
     return id;
   }
+
   function getSandBoxCode(codeId: any) {
     let sandboxcodeId = sessionStorage.getItem(SANDBOX_CODE_ID);
     let code = localStorage.getItem(codeId) || "";
@@ -61,6 +63,7 @@ const AppContent: React.FC = () => {
     }
     return code;
   }
+
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -78,13 +81,14 @@ const AppContent: React.FC = () => {
         ? code
         : SAMPLE_CODE.find((snippet) => snippet.language == params.lang)
             ?.content,
-
     input: input?.length > 0 ? input.split("\n") : [],
     downloadFile: "code.txt",
   });
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
+
   function getCourse(category: any) {
     switch (category) {
       case "c":
@@ -179,18 +183,6 @@ const AppContent: React.FC = () => {
     }
   }
 
-  // useEffect(() => {
-  //   let language = toTitleCase(params.lang);
-  //   const course = getCourse(params.lang);
-  //   if (course != "" && course != undefined) {
-  //     document.getElementById("btn-course").innerHTML = `Free ${language} Course`;
-  //     document.getElementById("btn-course").setAttribute("href", course);
-  //   } else {
-  //     document.getElementById("btn-course").innerHTML = ``;
-  //     document.getElementById("btn-course").style.display = "none";
-  //   }
-  // }, []);
-
   const runCode = () => {
     let code = editorState.code;
     const currentState = editorState;
@@ -233,7 +225,6 @@ const AppContent: React.FC = () => {
               .catch((err) => {
                 setOutput(err);
               });
-          } else {
           }
           break;
         case "java":
@@ -265,7 +256,6 @@ const AppContent: React.FC = () => {
               .catch((err) => {
                 setOutput(err);
               });
-          } else {
           }
           break;
         case "c":
@@ -288,7 +278,6 @@ const AppContent: React.FC = () => {
               .catch((err) => {
                 setOutput(err);
               });
-          } else {
           }
           break;
         case "cpp":
@@ -311,7 +300,6 @@ const AppContent: React.FC = () => {
               .catch((err) => {
                 setOutput(err);
               });
-          } else {
           }
           break;
         case "python":
@@ -334,7 +322,6 @@ const AppContent: React.FC = () => {
               .catch((err) => {
                 setOutput(err);
               });
-          } else {
           }
           break;
         case "javascript":
@@ -351,19 +338,6 @@ const AppContent: React.FC = () => {
           break;
       }
     }
-  };
-
-  const downloadCode = () => {
-    console.log("Downloading code...");
-  };
-
-  const copyCode = () => {
-    console.log("Copying code to clipboard...");
-  };
-
-  const resetCode = () => {
-    // setOutput("");
-    // setInput("");
   };
 
   useEffect(() => {
@@ -494,38 +468,32 @@ const AppContent: React.FC = () => {
             </SandpackLayout>
           </SandpackProvider>
         ) : (
-          <div className="flex-1 flex flex-col md:flex-row">
-            <div className="flex-1 flex flex-col">
-              <CodeEditor
-                editorstate={editorState}
-                seteditorstate={setEditorState}
-                data={data}
-                setData={setData}
-                user={SANDBOX_ID}
-                language={selectedLanguage}
-                onRun={runCode}
-                onDownload={downloadCode}
-                onCopy={copyCode}
-                onReset={resetCode}
-                output={output}
-              />
-            </div>
-
-            <div className="hidden md:block">
-              <ResizablePanel
-                minWidth={300}
-                maxWidth={800}
-                defaultWidth={480}
-                className="h-full bg-gray-900 border-l border-gray-700 flex flex-col"
-              >
+          <PanelGroup direction="horizontal">
+            <Panel defaultSize={75} minSize={30}>
+              <div className="flex-1 flex flex-col">
+                <CodeEditor
+                  editorstate={editorState}
+                  seteditorstate={setEditorState}
+                  data={data}
+                  setData={setData}
+                  user={SANDBOX_ID}
+                  language={selectedLanguage}
+                  onRun={runCode}
+                  output={output}
+                />
+              </div>
+            </Panel>
+            <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-blue-500 transition-colors" />
+            <Panel defaultSize={25} minSize={20} maxSize={50}>
+              <div className="h-full bg-gray-900 flex flex-col">
                 <InputOutputPanel
                   Output={output}
                   onInputChange={setInput}
                   onRun={runCode}
                 />
-              </ResizablePanel>
-            </div>
-          </div>
+              </div>
+            </Panel>
+          </PanelGroup>
         )}
 
         {/* Mobile: I/O bottom panel */}
@@ -538,13 +506,8 @@ const AppContent: React.FC = () => {
         </div>
       </div>
 
-      <MobileToolbar
-        onRun={runCode}
-        onDownload={downloadCode}
-        onCopy={copyCode}
-        onReset={resetCode}
-        onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      />
+      <MobileToolbar onRun={runCode} />
+      <ToastContainer />
     </div>
   );
 };
