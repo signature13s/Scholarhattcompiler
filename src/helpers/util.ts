@@ -1,4 +1,4 @@
-const checkWords = (code, wordsToCheck) => {
+const checkWords = (code: any, wordsToCheck: any) => {
   let wordCount = 0;
   // Check if each word exists in the string
   for (let i = 0; i < wordsToCheck.length; i++) {
@@ -12,7 +12,12 @@ const checkWords = (code, wordsToCheck) => {
   return wordCount;
 };
 
-const checkCode = (code, input, wordsToCheck, setOutput) => {
+const checkCode = (
+  code: any,
+  input: any,
+  wordsToCheck: any,
+  setOutput: any
+) => {
   let wordCount = checkWords(code.toLowerCase(), wordsToCheck);
   if (wordCount > 0) {
     if (input.length == 0) {

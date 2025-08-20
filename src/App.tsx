@@ -67,7 +67,6 @@ const AppContent: React.FC = () => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [data, setData] = useState(" ");
   const sandboxId = getSandBoxId();
   const code = getSandBoxCode(params?.id);
 
@@ -77,7 +76,7 @@ const AppContent: React.FC = () => {
     file: SANDBOX_ID,
     language: params.lang,
     code:
-      params?.id?.length > 0
+      params?.id && params?.id?.length > 0
         ? code
         : SAMPLE_CODE.find((snippet) => snippet.language == params.lang)
             ?.content,
@@ -474,8 +473,6 @@ const AppContent: React.FC = () => {
                 <CodeEditor
                   editorstate={editorState}
                   seteditorstate={setEditorState}
-                  data={data}
-                  setData={setData}
                   user={SANDBOX_ID}
                   language={selectedLanguage}
                   onRun={runCode}

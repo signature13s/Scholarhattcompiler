@@ -19,9 +19,9 @@ interface CodeEditorProps {
   editorstate: {
     user: string;
     file: string;
-    language: string;
+    language: string | undefined;
     code: string | undefined;
-    input: [];
+    input: string[];
     downloadFile: string;
   };
   output: any;
@@ -75,6 +75,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   function onReset() {
     setCode(initialCode || "");
+    setInitialCode(initialCode || "");
     Reset();
   }
   useEffect(() => {
@@ -142,7 +143,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     });
   };
 
-  const handleEditorDidMount = (editor: any, monaco: any) => {
+  const handleEditorDidMount = (_editor: any, monaco: any) => {
     monaco.editor.setTheme("monaco-111827-dark");
   };
 

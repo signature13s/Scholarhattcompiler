@@ -48,12 +48,6 @@ const getLanguage = (filename: string) => {
   return "plaintext";
 };
 
-interface FileItem {
-  id: string;
-  name: string;
-  content: string;
-}
-
 function PlayGroundCodeEditor({ collapsed }: any) {
   const { sandpack } = useSandpack();
   const { code, updateCode } = useActiveCode();
@@ -83,6 +77,7 @@ function PlayGroundCodeEditor({ collapsed }: any) {
   const resetCode = () => {
     // Reset to default contents if available, otherwise clear
     updateCode(initialCode || "");
+    setInitialCode(initialCode || "");
     Reset();
   };
 
@@ -199,7 +194,7 @@ function PlayGroundCodeEditor({ collapsed }: any) {
                 <Editor
                   height="calc(100vh - 150px)"
                   language={getLanguage(sandpack.activeFile)}
-                  key={sandpack.files}
+                  key={sandpack.activeFile}
                   value={code}
                   onChange={(value) => updateCode(value ?? "")}
                   beforeMount={defineCustomTheme}
